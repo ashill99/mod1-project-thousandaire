@@ -4,10 +4,10 @@ Question.destroy_all
 GameQuestion.destroy_all 
 
 #users
-chelsey = User.create(name: "Chelsey", password: "1234")
-jimmy = User.create(name: "Jimmy", password: "5678")
-jackie = User.create(name: "Jackie", password: "9090")
-erica = User.create(name: "Erica", password: "4332")
+chelsey = User.create(username: "Chelsey", password: "1234")
+jimmy = User.create(username: "Jimmy", password: "5678")
+jackie = User.create(username: "Jackie", password: "9090")
+erica = User.create(username: "Erica", password: "4332")
 u6 = User.create(username: "A", password: "1234")
 u7 = User.create(username: "B", password: "1235")
 u8 = User.create(username: "C", password: "1236")
