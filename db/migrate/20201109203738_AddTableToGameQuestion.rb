@@ -4,5 +4,6 @@ class AddTableToGameQuestion < ActiveRecord::Migration[5.2]
       t.integer :game_id
       t.integer :question_id
       t.integer :correct_answer
+    end
   end
 end

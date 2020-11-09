@@ -8,5 +8,6 @@ class AddTableToQuestion < ActiveRecord::Migration[5.2]
       t.string :incorrect_answer_1
       t.string :incorrect_answer_2
       t.string :incorrect_answer_3
+    end
   end
 end
