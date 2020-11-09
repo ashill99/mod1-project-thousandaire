@@ -18,7 +18,7 @@ g6 = Game.create(user_id: u6.id, lifeline_1: true, lifeline_2: true, lifeline_3:
 g7 = Game.create(user_id: u7.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
 g8 = Game.create(user_id: u8.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
 g9 = Game.create(user_id: u9.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
-g10 = Game.create(user_id: 105.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
+g10 = Game.create(user_id: u10.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
 
 gq6 = GameQuestion.create(game_id: g6.id, question_id: q6.id, correct_answer: 0)
 gq7 = GameQuestion.create(game_id: g7.id, question_id: q7.id, correct_answer: 0)
