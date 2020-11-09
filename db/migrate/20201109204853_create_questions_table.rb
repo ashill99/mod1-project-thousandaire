@@ -1,4 +1,4 @@
-class AddTableToQuestion < ActiveRecord::Migration[5.2]
+class CreateQuestionsTable < ActiveRecord::Migration[5.2]
   def change
     create_table :questions do |t|
       t.integer :value_of_question
