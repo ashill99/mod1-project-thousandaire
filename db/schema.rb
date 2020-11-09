@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_09_204853) do
+ActiveRecord::Schema.define(version: 2020_11_09_214636) do
 
-  create_table "gamequestions", force: :cascade do |t|
+  create_table "game_questions", force: :cascade do |t|
     t.integer "game_id"
     t.integer "question_id"
     t.integer "correct_answer"

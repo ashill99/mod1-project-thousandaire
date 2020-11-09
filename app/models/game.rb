@@ -1,2 +1,2 @@
-class Question < ActiveRecord::Base 
+class Game < ActiveRecord::Base 
 end

@@ -3,8 +3,8 @@ Game.destroy_all
 Question.destroy_all
 GameQuestion.destroy_all 
 
-#users
-chelsey = User.create(username: "Chelsey", password: "1234")
+# users
+chelsey = User.create(username: 'Chelsey', password: '1234')
 jimmy = User.create(username: "Jimmy", password: "5678")
 jackie = User.create(username: "Jackie", password: "9090")
 erica = User.create(username: "Erica", password: "4332")
@@ -34,11 +34,11 @@ q3 = Question.create(value_of_question: 10, difficulty: "easy", question: "Where
 q4 = Question.create(value_of_question: 100, difficulty: "hard", question: "What is the capital of Alaska?", correct_answer: "Juneau", incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")
 q5 = Question.create(value_of_question: 100, difficulty: "hard", question: "What is the capital of Oregon?", correct_answer: "Salem", incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")
 
-q6 = Question.create(value_of_question: 10, diffcicult: "easy", question: "What is the capital of France?", correct_answer: "Paris", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
-q7 = Question.create(value_of_question: 10, diffcicult: "easy", question: "What is the capital of USA?", correct_answer: "Washington, DC", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
-q8 = Question.create(value_of_question: 10, diffcicult: "easy", question: "What is the capital of Spain?", correct_answer: "Madrid", incorrect_answer_1: "London", incorrect_answer_2: "Barcelona", incorrect_answer_3: "Lyon")
-q9 = Question.create(value_of_question: 50, diffcicult: "medium", question: "What is the capital of Canada?", correct_answer: "Ottawa", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
-q10 = Question.create(value_of_question: 100, diffcicult: "hard", question: "What is the capital of Australia?", correct_answer: "Canberra", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
+q6 = Question.create(value_of_question: 10, difficulty: "easy", question: "What is the capital of France?", correct_answer: "Paris", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
+q7 = Question.create(value_of_question: 10, difficulty: "easy", question: "What is the capital of USA?", correct_answer: "Washington, DC", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
+q8 = Question.create(value_of_question: 10, difficulty: "easy", question: "What is the capital of Spain?", correct_answer: "Madrid", incorrect_answer_1: "London", incorrect_answer_2: "Barcelona", incorrect_answer_3: "Lyon")
+q9 = Question.create(value_of_question: 50, difficulty: "medium", question: "What is the capital of Canada?", correct_answer: "Ottawa", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
+q10 = Question.create(value_of_question: 100, difficulty: "hard", question: "What is the capital of Australia?", correct_answer: "Canberra", incorrect_answer_1: "London", incorrect_answer_2: "Madrid", incorrect_answer_3: "Lyon")
 
 #gamequestion
 
