@@ -70,7 +70,8 @@ class CLI
         choices = [ 
                 { "Play a new game" => 1},
                 { "See high scores" => 2},
-                { "Quit" => 3}
+                { "See leaderboard" => 3},
+                { "Quit" => 4}
             ]
             user_input = @@prompt.select("Welcome! Are you ready to win big?", choices)
                 case user_input 
@@ -79,7 +80,11 @@ class CLI
                     CLI.start_game 
                 when 2 
                     puts "The scores on the doors are..."
-                when 3 
+                    CLI.see_scores
+                when 3
+                    puts "Take me to your leader"
+                    CLI.leaderboard
+                when 4
                     puts "The pressure got too much for you huh?"
                     exit!
                 end
@@ -203,8 +208,19 @@ class CLI
             end
     end
 
-    # def see_scores 
-    # end
+    def self.see_scores
+        players_games = Game.all.find_all { |g| g.user_id == @user.id}
+        p1 = players_games.map { |pg| pg.score}
+        p2 = p1.max(5)
+        puts "Your top scores are:" 
+        p ""   
+        p2.each.with_index(1) do |s, i| puts "#{i}. #{s}" end 
+    end 
+
+    def self.leaderboard 
+       all_scores = Game.all.map { |g| g.score}
+       all_scores.max(10).each.with_index(1) do | s, i| puts "#{i}. #{s}" end 
+    end
 
     def self.question_medium 
         question = Question.all.select { |q| q.difficulty == "medium"}.sample
@@ -230,8 +246,8 @@ class CLI
                 puts "Incorrect! You lose!!!"
                 # display_score 
                 exit!
-    end
-end
+            end
+        end
     
     def self.question_hard
         question = Question.all.select { |q| q.difficulty == "hard"}.sample
@@ -256,8 +272,7 @@ end
                 puts "Incorrect! You lose!!!"
                 # display_score 
                 exit!
-    end
-end
+            end
+        end
 
-    
 end
