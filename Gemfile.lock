@@ -42,7 +42,6 @@ GEM
       activerecord (>= 3.2)
       sinatra (>= 1.0)
     sqlite3 (1.3.13)
-    term-images (0.3.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
     tty-color (0.6.0)
@@ -72,7 +71,6 @@ DEPENDENCIES
   require_all
   sinatra-activerecord
   sqlite3 (~> 1.3.6)
-  term-images (~> 0.3.0)
   tty-font
   tty-prompt
 
