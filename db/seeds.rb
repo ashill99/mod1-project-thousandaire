@@ -54,4 +54,3 @@ gq7 = GameQuestion.create(game_id: g7.id, question_id: q7.id, correct_answer: 0)
 gq8 = GameQuestion.create(game_id: g8.id, question_id: q8.id, correct_answer: 0)
 gq9 = GameQuestion.create(game_id: g9.id, question_id: q9.id, correct_answer: 0)
 gq10 = GameQuestion.create(game_id: g10.id, question_id: q10.id, correct_answer: 0)
-

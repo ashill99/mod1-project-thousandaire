@@ -1,5 +1,3 @@
-
-
 require "tty-prompt"
 
 prompt = TTY::Prompt.new
@@ -16,12 +14,12 @@ class CLI
         font = TTY::Font.new(:starwars)
         font2 = TTY::Font.new(:doom)
         puts pastel.yellow(font2.write("                                                                WHO"))        
-        sleep(0.5)
+        # sleep(0.5)
         puts ""
         puts pastel.yellow(font2.write("                 WANTS                                              TO"))  
-        sleep(0.5)
+        # sleep(0.5)
         puts pastel.yellow(font2.write("BE                                                                                                              A"))                                                                           
-        sleep(0.5)
+        # sleep(0.5)
         puts ""
         puts pastel.green(font.write("         THOUSANDAIRE"))
         puts ""
@@ -29,20 +27,54 @@ class CLI
 
     def run 
         greet
-        sleep(1)
+        # sleep(1)
         display_menu
     end 
 
     def display_menu 
             choices = [ 
-                { "Play a new game" => 1},
-                { "See high scores" => 2},
+                { "Log in" => 1},
+                { "Create new user" => 2},
                 { "Quit" => 3}
             ]
             user_input = @@prompt.select("What would you like to do?", choices)
                 case user_input 
                 when 1 
+                    CLI.log_in
+                when 2 
+                    CLI.new_user_create 
+                when 3 
+                    exit! 
+                end
+    end
+
+    def self.log_in
+        prompt = TTY::Prompt.new
+        username = prompt.ask("What's your name, friend?")
+        password = prompt.mask("Enter your password:")
+        if User.find_by(username: username, password: password)
+            CLI.play_menu
+        elsif User.find_by(username: username)
+            puts "Incorrect Password, please try again"
+            CLI.log_in
+            # quit if entered 3 times?
+        else 
+            puts "hmm...we can't find you. Create a new user? "
+            CLI.new_user_create
+        end
+    end 
+
+    def self.play_menu 
+        choices = [ 
+                { "Play a new game" => 1},
+                { "See high scores" => 2},
+                { "Quit" => 3}
+            ]
+            user_input = @@prompt.select("Welcome! Are you ready to win big?", choices)
+                case user_input 
+                when 1 
                     puts "Get your trigger finger ready!"
+                    CLI.start_game 
                 when 2 
                     puts "The scores on the doors are..."
                 when 3 
@@ -50,4 +82,165 @@ class CLI
                     exit!
                 end
     end
+
+    def self.new_user_create
+        prompt = TTY::Prompt.new
+        username = prompt.ask("Whats your name, friend?")
+        password = prompt.mask("Set your password:")
+            if User.find_by(username: username, password: password)
+            puts "User already exists, log in here:"
+            CLI.log_in
+        else 
+        User.create(username: username, password: password)
+        CLI.play_menu
+        end 
+    end
+
+#there are 10 rounds 
+# 1. 50 - easy
+# 2. 50 - easy 
+# 3 50  - easy
+# 4. 100 - medium 
+# 5. 100 -medium 
+# 6. 100 -medium 
+# 7. 100 -medium 
+# 8. 150 -hard 
+# 9. 150 -hard
+# 10. 150 -hard
+
+
+    def self.start_game    
+        prompt = TTY::Prompt.new
+
+        CLI.question_easy
+        CLI.question_easy
+        CLI.question_easy
+        CLI.question_medium
+        CLI.question_medium
+        CLI.question_medium
+        CLI.question_medium
+        CLI.question_hard
+        CLI.question_hard
+        CLI.question_hard
+        
+        puts "Congratulations, you are officially a Thousandaire"
+
+        
+        # answers = [ 
+        #     { "#{Question.first.incorrect_answer_1}" => 1},
+        #     { "#{Question.first.incorrect_answer_2}" => 2},
+        #     { "#{Question.first.correct_answer}" => 3},
+        #     { "#{Question.first.incorrect_answer_3}" => 4}
+        # ]
+        # user_answer = @@prompt.select("#{Question.first.question}",
+        #  answers)
+        # if user_answer == Question.first.correct_answer
+        #     continue_game
+        # else 
+        #     puts "Incorrect! You lose!!!"
+        #     # display_score 
+    end
+
+#QUESTIONS -how to avoid repeats.
+    def self.question_easy 
+        question = Question.all.select { |q| q.difficulty == "easy"}.sample
+
+        # i = 1
+        # questions[i]
+        # i+= 1
+        # binding.pry
+        # question_one = []
+        # question_two = []
+        # question_three = []
+        # i = 0 
+        # while i < questions.length 
+        #     item = questions[i]
+        #     item << question_one 
+        #         if question_one == item 
+        #             item << question_two 
+        #             if question_two == item 
+        #                 item << question_3
+        #     i += 1
+        #             end
+        #         end
+        #     end
+     
+        answers = [ 
+                "#{question.incorrect_answer_1}",
+                "#{question.incorrect_answer_2}",
+                "#{question.correct_answer}",
+                "#{question.incorrect_answer_3}"
+    ].shuffle
+            user_answer = @@prompt.select("#{question.question}",
+             answers)
+            
+            if user_answer == question.correct_answer
+                # sleep(1.5)
+                puts "Congratulations, that is the correct answer"
+                #add question value to user high score 
+                # User.score += question.value_of_question
+                # i += 1 
+
+                # continue_game
+            else 
+                puts "Incorrect! You lose!!!"
+                # display_score 
+                exit!
+            end
+    end
+
+    
+
+    def self.question_medium 
+        question = Question.all.select { |q| q.difficulty == "medium"}.sample
+     
+        answers = [ 
+                "#{question.incorrect_answer_1}",
+                "#{question.incorrect_answer_2}",
+                "#{question.correct_answer}",
+                "#{question.incorrect_answer_3}"
+    ].shuffle
+            user_answer = @@prompt.select("#{question.question}",
+             answers)
+            #  binding.pry
+            if user_answer == question.correct_answer
+                # sleep(1.5)
+                puts "Congratulations, that is the correct answer"
+                #add question value to user high score 
+                # User.score += question.value_of_question
+
+                # continue_game
+            else 
+                puts "Incorrect! You lose!!!"
+                # display_score 
+                exit!
+    end
+end
+    
+    def self.question_hard
+        question = Question.all.select { |q| q.difficulty == "hard"}.sample
+     
+        answers = [ 
+                "#{question.incorrect_answer_1}",
+                "#{question.incorrect_answer_2}",
+                "#{question.correct_answer}",
+                "#{question.incorrect_answer_3}"
+    ].shuffle
+            user_answer = @@prompt.select("#{question.question}",
+             answers)
+            #  binding.pry
+            if user_answer == question.correct_answer
+                # sleep(1.5)
+                puts "Congratulations, that is the correct answer"
+                #add question value to user high score 
+                # User.score += question.value_of_question
+
+                # continue_game
+            else 
+                puts "Incorrect! You lose!!!"
+                # display_score 
+                exit!
+    end
+end
+
 end
