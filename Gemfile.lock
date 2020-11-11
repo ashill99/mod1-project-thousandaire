@@ -31,6 +31,8 @@ GEM
     mime-types-data (3.2020.1104)
     minitest (5.13.0)
     mustermann (1.0.3)
+    natural_time (0.2.1)
+      activesupport
     netrc (0.11.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -58,6 +60,9 @@ GEM
     sqlite3 (1.3.13)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    timer (0.2)
+      activesupport
+      natural_time
     tty-color (0.6.0)
     tty-cursor (0.7.1)
     tty-font (0.5.0)
@@ -89,6 +94,7 @@ DEPENDENCIES
   rest-client
   sinatra-activerecord
   sqlite3 (~> 1.3.6)
+  timer
   tty-font
   tty-prompt
 

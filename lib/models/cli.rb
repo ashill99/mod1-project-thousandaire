@@ -103,14 +103,10 @@ class CLI
         end 
     end
 
-
-
     def self.start_game    
         prompt = TTY::Prompt.new
         @score = 0 
-
-        
-
+    
         CLI.question_easy
         @score += 10  #how do we not hard code this?
         CLI.question_easy
@@ -148,54 +144,64 @@ class CLI
     end
 
 #QUESTIONS -how to avoid repeats.
+
     def self.question_easy 
-        question = Question.all.select { |q| q.difficulty == "easy"}.sample
 
-        # i = 1
-        # questions[i]
-        # i+= 1
-        # binding.pry
-        # question_one = []
-        # question_two = []
-        # question_three = []
-        # i = 0 
-        # while i < questions.length 
-        #     item = questions[i]
-        #     item << question_one 
-        #         if question_one == item 
-        #             item << question_two 
-        #             if question_two == item 
-        #                 item << question_3
-        #     i += 1
-        #             end
-        #         end
-        #     end
-     
-        answers = [ 
-                "#{question.incorrect_answer_1}",
-                "#{question.incorrect_answer_2}",
-                "#{question.correct_answer}",
-                "#{question.incorrect_answer_3}"
-    ].shuffle
-            user_answer = @@prompt.select("#{question.question}",
-             answers)
-            
-            if user_answer == question.correct_answer
-                # sleep(1.5)
-                puts "Congratulations, #{@user.username}, that is the correct answer"
-                #add question value to user high score 
-                puts "You banked #{question.value_of_question}"
-
-                # this_game.score += question.value_of_question
-                # i += me.sc1 
-
-                # continue_game
-            else 
-                puts "Incorrect! You lose!!!"
-                # display_score 
-                exit!
+        # 15.downto(0) do |i|
+        #     puts "00:00:#{'%02d' % i}"
+        #     sleep 1
+        #   end
+        p " "
+        puts "You have 15 seconds to answer:"
+              question = Question.all.select { |q| q.difficulty == "easy"}.sample
+              answers = [ 
+                  "#{question.incorrect_answer_1}",
+                  "#{question.incorrect_answer_2}",
+                  "#{question.correct_answer}",
+                  "#{question.incorrect_answer_3}"
+                      ].shuffle
+              user_answer = @@prompt.select("#{question.question}",
+               answers)
+              
+                  if user_answer == question.correct_answer
+                      # sleep(1.5)
+                      puts "Congratulations, #{@user.username}, that is the correct answer"
+                      puts "You banked #{question.value_of_question}"
+                  # continue_game
+                  elsif 
+                      user_answer != question.correct_answer
+                      puts "Incorrect! You lose!!!"
+                      #  display score 
+                      exit!
+                  end
             end
-    end
+
+            def timer(seconds)
+                Timer.new(seconds) { raise Timeout::Error, "timeout!" }
+            end
+
+            def countdown_timer 
+                30.downto(0) do |i|
+                    puts "00:00:#{'%02d' % i}"
+                    sleep 1
+                end
+            end
+            
+            def 50_50 
+            end
+
+            def phone_a_friend 
+
+                countdown_timer
+            end
+
+            def ask_the_audience
+
+                countdown_timer
+            end
+
+           
+
 
     def self.see_scores
         players_games = Game.all.find_all { |g| g.user_id == @user.id}
