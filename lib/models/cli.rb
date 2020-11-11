@@ -107,7 +107,11 @@ class CLI
     def self.start_game    
         prompt = TTY::Prompt.new
         @score = 0 
-    
+        @this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
+
+
+        
+
         CLI.question_easy
         
         @score += 10  #how do we not hard code this?
@@ -126,9 +130,8 @@ class CLI
         
         puts "Congratulations, you are officially a Thousandaire"
         
-        this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
-        p @score 
-        p this_game
+        # p @score 
+        # p @this_game
         
         # answers = [ 
         #     { "#{Question.first.incorrect_answer_1}" => 1},
@@ -146,25 +149,21 @@ class CLI
     end
 
 #QUESTIONS -how to avoid repeats.
-
     def self.question_easy 
-        p " "
-              question = Question.all.select { |q| q.difficulty == "easy"}.sample
-              answers = [ 
-                  {"#{question.correct_answer}" => 1},
-                  {"#{question.incorrect_answer_1}" => 2},
-                  {"#{question.incorrect_answer_2}" => 3},
-                  {"#{question.incorrect_answer_3}" => 4}
-                      ].shuffle
-            lifelines = [{"50/50" => 5},
-                        {"Phone a Friend" => 6},
-                        {"Ask the Audience" => 7},
-                      ]
-              user_answer = @@prompt.select("#{question.question}",
-               answers, "\n Use a lifeline:",  lifelines)
-              
-               case user_answer 
-               when 1
+        question = Question.all.select { |q| q.difficulty == "easy"}.sample
+        GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
+        binding.pry
+     
+        answers = [ 
+                "#{question.incorrect_answer_1}",
+                "#{question.incorrect_answer_2}",
+                "#{question.correct_answer}",
+                "#{question.incorrect_answer_3}"
+    ].shuffle
+            user_answer = @@prompt.select("#{question.question}",
+             answers)
+            
+            if user_answer == question.correct_answer
                 # sleep(1.5)
                 puts "Congratulations, #{@user.username}, that is the correct answer"
                 puts "You banked #{question.value_of_question}"
