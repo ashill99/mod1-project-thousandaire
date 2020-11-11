@@ -118,12 +118,13 @@ class CLI
         prompt = TTY::Prompt.new
         @score = 0 
         @this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
-
+        @question_number = 1 
         CLI.question_easy
         @score += 10 
+        @question_number += 1
         CLI.update_score
-                #how do we not hard code this?
         CLI.question_easy
+        @question_number += 1
         @score += 10 
         CLI.update_score        #how do we not hard code this?
         CLI.question_easy
@@ -136,7 +137,6 @@ class CLI
         # CLI.question_hard
         # CLI.question_hard
         # CLI.question_hard
-        
         # @@current_game.score = @score 
         CLI.update_score
         puts "Congratulations, you are officially a Thousandaire"
@@ -150,9 +150,10 @@ class CLI
     end
 
     def self.question_easy 
-        p " "
-        
             question = Question.all.select { |q| q.difficulty == "easy"}.sample
+            GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
+        # binding.pry
+
             answers = [ 
                   {"#{question.correct_answer}" => 1},
                   {"#{question.incorrect_answer_1}" => 2},
@@ -164,85 +165,24 @@ class CLI
                     {"Phone a Friend" => 6},
                     {"Ask the Audience" => 7},
                     ]
-            # 5answers = [
-            #         {"#{question.correct_answer}" => 1},
-            #         {"#{question.incorrect_answer_1}" => 2}
-            #             ].shuffle
+            answers_5050 = [
+                    {"#{question.correct_answer}" => 1},
+                    {"#{question.incorrect_answer_1}" => 2}
+                ].shuffle
+
                     loop do
-                        
+                        system('clear')
+                        puts "Question #{@question_number}: \n\n"
                         user_answer = @@prompt.select("#{question.question}",
                         answers, "\n Use a lifeline:",  lifelines)
-        
-        # p @score 
-        # p @this_game
-        
-        # answers = [ 
-        #     { "#{Question.first.incorrect_answer_1}" => 1},
-        #     { "#{Question.first.incorrect_answer_2}" => 2},
-        #     { "#{Question.first.correct_answer}" => 3},
-        #     { "#{Question.first.incorrect_answer_3}" => 4}
-        # ]
-        # user_answer = @@prompt.select("#{Question.first.question}",
-        #  answers)
-        # if user_answer == Question.first.correct_answer
-        #     continue_game
-        # else 
-        #     puts "Incorrect! You lose!!!"
-        #     # display_score 
-    end
-
-#QUESTIONS -how to avoid repeats.
-    def self.question_easy 
-        question = Question.all.select { |q| q.difficulty == "easy"}.sample
-        GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
-        binding.pry
-     
-        answers = [ 
-                "#{question.incorrect_answer_1}",
-                "#{question.incorrect_answer_2}",
-                "#{question.correct_answer}",
-                "#{question.incorrect_answer_3}"
-    ].shuffle
-            user_answer = @@prompt.select("#{question.question}",
-             answers)
-            
-            if user_answer == question.correct_answer
-                # sleep(1.5)
-                puts "Congratulations, #{@user.username}, that is the correct answer"
-                puts "You banked #{question.value_of_question}"
-               when 2 
-                puts "Incorrect! You lose!!!"
-                #  display score 
-                exit!
-               when 3 
-                puts "Incorrect! You lose!!!"
-                      #  display score 
-                      exit!
-               when 4 
-                puts "Incorrect! You lose!!!"
-                      #  display score 
-                      exit!
-               when 5 
-                # 50_50
-               when 6 
-                puts "You have 30 seconds to phone a friend, make it count" 
-                    CLI.phone_a_friend 
-            #    rescue
-            #     retry  
-            #    end
-               when 7 
-                puts "You have 30 seconds to ask the audience, let's hope they know!" 
-                CLI.ask_the_audience
-               end 
-            end
 
                             case user_answer 
                             when 1
                                 # sleep(1.5)
-                                puts "Congratulations, #{@user.username}, that is the correct answer"
+                                puts "Congratulations, #{@user.username}, that is the correct answer \n"
                                 puts "You banked #{question.value_of_question}"
                             break
-                        when 2 
+                            when 2 
                             puts "Incorrect! You lose!!!"
                             puts "You scored #{@this_game.score} points."
                             #  display score 
@@ -257,28 +197,44 @@ class CLI
                                   #  display score 
                                   puts "You scored #{@this_game.score} points."
                                   exit
-                           when 5 
-                            # 50_50
-                                # puts user_answer2 = @@prompt.select("#{question.question}",
-                                # 5050_answers)
-                                # if user_answer2 == 1
-                                #     break 
-                                # else 
-                                #     puts "You had a 50/50 chance and you blew it!"
-                                #     exit
-                                # end 
+                           when 5    
+                                if @this_game.lifeline_1 == true 
+                                puts user_answer = @@prompt.select("#{question.question}",
+                                answers_5050)
+                                    if user_answer == 1
+                                        @this_game.lifeline_1 = false 
+                                        break 
+                                    else 
+                                    system('clear')
+                                    puts "You had a 50/50 chance and you blew it!"
+                                    puts "You scored #{@this_game.score} points."
+                                    # sleep(1)
+                                    exit
+                                end 
+                                else 
+                                    system('clear')
+                                    puts "You have already used 50/50!"
+                            end
                            when 6 
-                            # if Game.lifeline_2 == true 
+                            if @this_game.lifeline_2 == true 
                             puts "You have 30 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
-                            #     Game.lifeline_2 = false 
+                                @this_game.lifeline_2 = false 
+                            else 
+                                puts "\n\n You have already phoned your friend! \n\n "
+                            end
                             # end
                             # else 
                                 # puts "You have used your lifeline"
                                 # lifelines.reject { |h| h["Phone a Friend"] }
                            when 7 
-                            puts "You have 30 seconds to ask the audience, let's hope they know!" 
-                            CLI.ask_the_audience
+                            if @this_game.lifeline_3 == true
+                                puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                                CLI.ask_the_audience
+                                @this_game.lifeline_3 = false
+                            else 
+                                puts "\n\n You have already asked the audience! \n\n"
+                            end
                            end
                         end
                     end      
@@ -287,10 +243,10 @@ class CLI
             #     Timer.new(seconds) { raise Timeout::Error, "timeout!" }
             # end
 
+
             def check_phone_a_friend 
                 Game.all.select { |game| game.user_id == @user}
             end
-
 
             def self.time_seconds 
                 t1 = Time.now 
