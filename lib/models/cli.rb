@@ -145,18 +145,14 @@ class CLI
 
 #QUESTIONS -how to avoid repeats.
 
-    def question_easy 
+    def self.question_easy 
 
+        # 15.downto(0) do |i|
+        #     puts "00:00:#{'%02d' % i}"
+        #     sleep 1
+        #   end
+        p " "
         puts "You have 15 seconds to answer:"
-        t1 = Time do |timer| 
-            timer.total_time.round 
-        end
-
-        puts t1
-            # while t1.sec < (t1.sec + 15)
-            #     if t1.sec > (t1.sec + 15)
-            #         puts "Sorry you have run out of time!"
-            #         exit!
               question = Question.all.select { |q| q.difficulty == "easy"}.sample
               answers = [ 
                   "#{question.incorrect_answer_1}",
@@ -166,6 +162,7 @@ class CLI
                       ].shuffle
               user_answer = @@prompt.select("#{question.question}",
                answers)
+              
                   if user_answer == question.correct_answer
                       # sleep(1.5)
                       puts "Congratulations, #{@user.username}, that is the correct answer"
@@ -176,15 +173,35 @@ class CLI
                       puts "Incorrect! You lose!!!"
                       #  display score 
                       exit!
-                    #   if t1.sec > (t1.sec + 15)
-                    #     puts "Sorry you have run out of time!"
-                    #     exit!
-                end
+                  end
             end
 
             def timer(seconds)
                 Timer.new(seconds) { raise Timeout::Error, "timeout!" }
             end
+
+            def countdown_timer 
+                30.downto(0) do |i|
+                    puts "00:00:#{'%02d' % i}"
+                    sleep 1
+                end
+            end
+            
+            def 50_50 
+            end
+
+            def phone_a_friend 
+
+                countdown_timer
+            end
+
+            def ask_the_audience
+
+                countdown_timer
+            end
+
+           
+
 
     def self.see_scores
         players_games = Game.all.find_all { |g| g.user_id == @user.id}
