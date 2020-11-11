@@ -7,6 +7,7 @@ require "pry"
 
 class CLI
 
+    @@current_game = nil 
     @@prompt = TTY::Prompt.new
 
     def greet 
@@ -35,7 +36,8 @@ class CLI
             choices = [ 
                 { "Log in" => 1},
                 { "Create new user" => 2},
-                { "Quit" => 3}
+                { "See Leaderboard" => 3},
+                { "Quit" => 4}
             ]
             user_input = @@prompt.select("What would you like to do?", choices)
                 case user_input 
@@ -43,7 +45,9 @@ class CLI
                     CLI.log_in
                 when 2 
                     CLI.new_user_create 
-                when 3 
+                when 3
+                    CLI.leaderboard
+                when 4
                     exit! 
                 end
     end
@@ -72,7 +76,8 @@ class CLI
                 { "Play a new game" => 1},
                 { "See high scores" => 2},
                 { "See leaderboard" => 3},
-                { "Quit" => 4}
+                { "Delete your account" => 4},
+                { "Quit" => 5}
             ]
             user_input = @@prompt.select("Welcome! Are you ready to win big?", choices)
                 case user_input 
@@ -86,6 +91,11 @@ class CLI
                     puts "Take me to your leader"
                     CLI.leaderboard
                 when 4
+                    User.delete(@user)
+                    puts "You have deleted your user account."
+                    system('clear')
+                    CLI.log_in
+                when 5
                     puts "The pressure got too much for you huh?"
                     exit!
                 end
@@ -107,7 +117,8 @@ class CLI
     def self.start_game    
         prompt = TTY::Prompt.new
         @score = 0 
-    
+        # @@current_game = GameQuestion.create
+
         CLI.question_easy
         
         @score += 10  #how do we not hard code this?
@@ -123,26 +134,14 @@ class CLI
         # CLI.question_hard
         # CLI.question_hard
         
+        # @@current_game.score = @score 
         
         puts "Congratulations, you are officially a Thousandaire"
         
-        this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
+        Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
         p @score 
-        p this_game
+        # p @@current_game
         
-        # answers = [ 
-        #     { "#{Question.first.incorrect_answer_1}" => 1},
-        #     { "#{Question.first.incorrect_answer_2}" => 2},
-        #     { "#{Question.first.correct_answer}" => 3},
-        #     { "#{Question.first.incorrect_answer_3}" => 4}
-        # ]
-        # user_answer = @@prompt.select("#{Question.first.question}",
-        #  answers)
-        # if user_answer == Question.first.correct_answer
-        #     continue_game
-        # else 
-        #     puts "Incorrect! You lose!!!"
-        #     # display_score 
     end
 
 #QUESTIONS -how to avoid repeats.
@@ -156,13 +155,17 @@ class CLI
                   {"#{question.incorrect_answer_2}" => 3},
                   {"#{question.incorrect_answer_3}" => 4}
                       ].shuffle
-            lifelines = [{"50/50" => 5},
-                        {"Phone a Friend" => 6},
-                        {"Ask the Audience" => 7},
-                      ]
+            lifelines = ["Would you like to use a lifeline? => 5"]
+            
+            # [{"50/50" => 5},
+            #             {"Phone a Friend" => 6},
+            #             {"Ask the Audience" => 7},
+            #           ]
                       loop do
+                        
                         user_answer = @@prompt.select("#{question.question}",
                         answers, "\n Use a lifeline:",  lifelines)
+
                             case user_answer 
                             when 1
                                 # sleep(1.5)
@@ -184,11 +187,18 @@ class CLI
                            when 5 
                             # 50_50
                            when 6 
+                            # if GameQuestion.lifeline_2 == true 
                             puts "You have 30 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
+                                # Game.lifeline_2 = false 
+                            # else 
+                                # puts "You have used your lifeline"
+                                # lifelines.reject { |h| h["Phone a Friend"] }
+
                            when 7 
                             puts "You have 30 seconds to ask the audience, let's hope they know!" 
                             CLI.ask_the_audience
+
                            end
                         end
                     end      
@@ -282,19 +292,26 @@ class CLI
            
 
 
-    def self.see_scores
-        players_games = Game.all.find_all { |g| g.user_id == @user.id}
-        p1 = players_games.map { |pg| pg.score}
-        p2 = p1.max(5)
-        puts "Your top scores are:" 
-        p ""   
-        p2.each.with_index(1) do |s, i| puts "#{i}. #{s}" end 
-    end 
-
-    def self.leaderboard 
-       all_scores = Game.all.map { |g| g.score}
-       all_scores.max(10).each.with_index(1) do | s, i| puts "#{i}. #{s}" end 
-    end
+            def self.leaderboard 
+                all_scores = Game.all.max_by(10) { |g| g.score} 
+                user_id = all_scores.map { |game| game.user_id }
+                players = user_id.map {|id| User.find(id).username}
+                scores = all_scores.map { |g| g.score }
+                # binding.pry
+                i = 0
+                while i < 10
+                 puts "#{i + 1}. #{players[i]}: #{scores[i]}"
+                 i +=1
+                end 
+             end
+        
+             def self.see_scores
+                players_games = Game.all.find_all { |g| g.user_id == @user.id}
+                p1 = players_games.map { |pg| pg.score}
+                p2 = p1.max(5)
+                puts "Your top scores are:\n"  
+                p2.each.with_index(1) do |s, i| puts "#{i}. #{s}" end
+            end 
 
     def self.question_medium 
         question = Question.all.select { |q| q.difficulty == "medium"}.sample
