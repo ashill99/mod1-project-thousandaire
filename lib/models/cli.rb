@@ -108,6 +108,8 @@ class CLI
     def self.start_game    
         prompt = TTY::Prompt.new
         @score = 0 
+        @this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
+
 
         
 
@@ -128,9 +130,8 @@ class CLI
         
         puts "Congratulations, you are officially a Thousandaire"
         
-        this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
-        p @score 
-        p this_game
+        # p @score 
+        # p @this_game
         
         # answers = [ 
         #     { "#{Question.first.incorrect_answer_1}" => 1},
@@ -150,26 +151,8 @@ class CLI
 #QUESTIONS -how to avoid repeats.
     def self.question_easy 
         question = Question.all.select { |q| q.difficulty == "easy"}.sample
-
-        # i = 1
-        # questions[i]
-        # i+= 1
-        # binding.pry
-        # question_one = []
-        # question_two = []
-        # question_three = []
-        # i = 0 
-        # while i < questions.length 
-        #     item = questions[i]
-        #     item << question_one 
-        #         if question_one == item 
-        #             item << question_two 
-        #             if question_two == item 
-        #                 item << question_3
-        #     i += 1
-        #             end
-        #         end
-        #     end
+        GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
+        binding.pry
      
         answers = [ 
                 "#{question.incorrect_answer_1}",
