@@ -118,9 +118,10 @@ class CLI
         prompt = TTY::Prompt.new
         @score = 0 
         # @@current_game = GameQuestion.create
+        this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
+        
 
         CLI.question_easy
-        
         @score += 10  #how do we not hard code this?
         CLI.question_easy
         @score += 10 #how do we not hard code this?
@@ -137,10 +138,8 @@ class CLI
         # @@current_game.score = @score 
         
         puts "Congratulations, you are officially a Thousandaire"
-        
-        Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
-        p @score 
-        # p @@current_game
+       this_game.score = @score
+       binding.pry
         
     end
 
@@ -148,20 +147,20 @@ class CLI
 
     def self.question_easy 
         p " "
-              question = Question.all.select { |q| q.difficulty == "easy"}.sample
-              answers = [ 
+        
+            question = Question.all.select { |q| q.difficulty == "easy"}.sample
+            answers = [ 
                   {"#{question.correct_answer}" => 1},
                   {"#{question.incorrect_answer_1}" => 2},
                   {"#{question.incorrect_answer_2}" => 3},
                   {"#{question.incorrect_answer_3}" => 4}
                       ].shuffle
-            lifelines = ["Would you like to use a lifeline? => 5"]
-            
-            # [{"50/50" => 5},
-            #             {"Phone a Friend" => 6},
-            #             {"Ask the Audience" => 7},
-            #           ]
-                      loop do
+            lifelines = [
+                    {"50/50" => 5},
+                    {"Phone a Friend" => 6},
+                    {"Ask the Audience" => 7},
+                    ]
+                    loop do
                         
                         user_answer = @@prompt.select("#{question.question}",
                         answers, "\n Use a lifeline:",  lifelines)
@@ -187,18 +186,17 @@ class CLI
                            when 5 
                             # 50_50
                            when 6 
-                            # if GameQuestion.lifeline_2 == true 
+                            # if Game.lifeline_2 == true 
                             puts "You have 30 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
-                                # Game.lifeline_2 = false 
+                            #     Game.lifeline_2 = false 
+                            # end
                             # else 
                                 # puts "You have used your lifeline"
                                 # lifelines.reject { |h| h["Phone a Friend"] }
-
                            when 7 
                             puts "You have 30 seconds to ask the audience, let's hope they know!" 
                             CLI.ask_the_audience
-
                            end
                         end
                     end      
@@ -264,6 +262,11 @@ class CLI
             # def timer(seconds)
             #     Timer.new(seconds) { raise Timeout::Error, "timeout!" }
             # end
+
+            def check_phone_a_friend 
+                Game.all.select { |game| game.user_id == @user}
+            end
+
 
             def self.time_seconds 
                 t1 = Time.now 
@@ -340,29 +343,29 @@ class CLI
             end
         end
     
-    def self.question_hard
-        question = Question.all.select { |q| q.difficulty == "hard"}.sample
+    # def self.question_hard
+    #     question = Question.all.select { |q| q.difficulty == "hard"}.sample
      
-        answers = [ 
-                "#{question.incorrect_answer_1}",
-                "#{question.incorrect_answer_2}",
-                "#{question.correct_answer}",
-                "#{question.incorrect_answer_3}"
-    ].shuffle
-            user_answer = @@prompt.select("#{question.question}",
-             answers)
-            #  binding.pry
-            if user_answer == question.correct_answer
-                # sleep(1.5)
-                puts "Congratulations, that is the correct answer"
-                #add question value to user high score 
-                # User.score += question.value_of_question
+    #     answers = [ 
+    #             "#{question.incorrect_answer_1}",
+    #             "#{question.incorrect_answer_2}",
+    #             "#{question.correct_answer}",
+    #             "#{question.incorrect_answer_3}"
+    # ].shuffle
+    #         user_answer = @@prompt.select("#{question.question}",
+    #          answers)
+    #         #  binding.pry
+    #         if user_answer == question.correct_answer
+    #             # sleep(1.5)
+    #             puts "Congratulations, that is the correct answer"
+    #             #add question value to user high score 
+    #             # User.score += question.value_of_question
 
-                # continue_game
-            else 
-                puts "Incorrect! You lose!!!"
-                # display_score 
-                exit!
-            end
-        end
+    #             # continue_game
+    #         else 
+    #             puts "Incorrect! You lose!!!"
+    #             # display_score 
+    #             exit!
+    #         end
+    #     end
 end
