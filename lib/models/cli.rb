@@ -160,39 +160,69 @@ class CLI
                         {"Phone a Friend" => 6},
                         {"Ask the Audience" => 7},
                       ]
-              user_answer = @@prompt.select("#{question.question}",
-               answers, "\n Use a lifeline:",  lifelines)
+                      loop do
+                        user_answer = @@prompt.select("#{question.question}",
+                        answers, "\n Use a lifeline:",  lifelines)
+                            case user_answer 
+                            when 1
+                            when 1
+                                # sleep(1.5)
+                                puts "Congratulations, #{@user.username}, that is the correct answer"
+                                puts "You banked #{question.value_of_question}"
+                            break
+                        when 2 
+                            puts "Incorrect! You lose!!!"
+                            #  display score 
+                            exit!
+                           when 3 
+                            puts "Incorrect! You lose!!!"
+                                  #  display score 
+                                  exit!
+                           when 4 
+                            puts "Incorrect! You lose!!!"
+                                  #  display score 
+                                  exit!
+                           when 5 
+                            # 50_50
+                           when 6 
+                            puts "You have 30 seconds to phone a friend, make it count" 
+                                CLI.phone_a_friend 
+                           when 7 
+                            puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                            CLI.ask_the_audience
+                           end
+                        end
+                    end      
+            #   user_answer = @@prompt.select("#{question.question}",
+            #    answers, "\n Use a lifeline:",  lifelines)
               
-               case user_answer 
-               when 1
-                # sleep(1.5)
-                puts "Congratulations, #{@user.username}, that is the correct answer"
-                puts "You banked #{question.value_of_question}"
-               when 2 
-                puts "Incorrect! You lose!!!"
-                #  display score 
-                exit!
-               when 3 
-                puts "Incorrect! You lose!!!"
-                      #  display score 
-                      exit!
-               when 4 
-                puts "Incorrect! You lose!!!"
-                      #  display score 
-                      exit!
-               when 5 
-                # 50_50
-               when 6 
-                puts "You have 30 seconds to phone a friend, make it count" 
-                    CLI.phone_a_friend 
-            #    rescue
-            #     retry  
+            #    case user_answer 
+            #    when 1
+            #     # sleep(1.5)
+            #     puts "Congratulations, #{@user.username}, that is the correct answer"
+            #     puts "You banked #{question.value_of_question}"
+            #    when 2 
+            #     puts "Incorrect! You lose!!!"
+            #     #  display score 
+            #     exit!
+            #    when 3 
+            #     puts "Incorrect! You lose!!!"
+            #           #  display score 
+            #           exit!
+            #    when 4 
+            #     puts "Incorrect! You lose!!!"
+            #           #  display score 
+            #           exit!
+            #    when 5 
+            #     # 50_50
+            #    when 6 
+            #     puts "You have 30 seconds to phone a friend, make it count" 
+            #         CLI.phone_a_friend 
+            #    when 7 
+            #     puts "You have 30 seconds to ask the audience, let's hope they know!" 
+            #     CLI.ask_the_audience
             #    end
-               when 7 
-                puts "You have 30 seconds to ask the audience, let's hope they know!" 
-                CLI.ask_the_audience
-               end 
-            end
+            # end
 
                 #   if user_answer == question.correct_answer
                 #       # sleep(1.5)
