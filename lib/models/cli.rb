@@ -50,17 +50,18 @@ class CLI
 
     def self.log_in
         prompt = TTY::Prompt.new
-        username = prompt.ask("What's your name, friend?")
+        username = prompt.ask("Welcome back! Remind us of your name?")
         password = prompt.mask("Enter your password:")
         if User.find_by(username: username, password: password)
             @user = User.find_by(username: username, password: password)
             @user
             CLI.play_menu
         elsif User.find_by(username: username)
-            puts "Incorrect Password, please try again"
+            puts "Incorrect Password, please try again:"
             CLI.log_in
             # quit if entered 3 times?
         else 
+            system('clear')
             puts "hmm...we can't find you. Create a new user? "
             CLI.new_user_create
         end
@@ -187,18 +188,18 @@ class CLI
                 end
             end
             
-            def 50_50 
-            end
+            # def 50_50 
+            # end
 
-            def phone_a_friend 
+            # def phone_a_friend 
 
-                countdown_timer
-            end
+            #     countdown_timer
+            # end
 
-            def ask_the_audience
+            # def ask_the_audience
 
-                countdown_timer
-            end
+            #     countdown_timer
+            # end
 
            
 
