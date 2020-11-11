@@ -109,6 +109,7 @@ class CLI
         @score = 0 
     
         CLI.question_easy
+        
         @score += 10  #how do we not hard code this?
         CLI.question_easy
         @score += 10 #how do we not hard code this?
@@ -147,59 +148,107 @@ class CLI
 #QUESTIONS -how to avoid repeats.
 
     def self.question_easy 
-
-        # 15.downto(0) do |i|
-        #     puts "00:00:#{'%02d' % i}"
-        #     sleep 1
-        #   end
         p " "
-        puts "You have 15 seconds to answer:"
               question = Question.all.select { |q| q.difficulty == "easy"}.sample
               answers = [ 
-                  "#{question.incorrect_answer_1}",
-                  "#{question.incorrect_answer_2}",
-                  "#{question.correct_answer}",
-                  "#{question.incorrect_answer_3}"
+                  {"#{question.correct_answer}" => 1},
+                  {"#{question.incorrect_answer_1}" => 2},
+                  {"#{question.incorrect_answer_2}" => 3},
+                  {"#{question.incorrect_answer_3}" => 4}
                       ].shuffle
+            lifelines = [{"50/50" => 5},
+                        {"Phone a Friend" => 6},
+                        {"Ask the Audience" => 7},
+                      ]
               user_answer = @@prompt.select("#{question.question}",
-               answers)
+               answers, "\n Use a lifeline:",  lifelines)
               
-                  if user_answer == question.correct_answer
-                      # sleep(1.5)
-                      puts "Congratulations, #{@user.username}, that is the correct answer"
-                      puts "You banked #{question.value_of_question}"
-                  # continue_game
-                  elsif 
-                      user_answer != question.correct_answer
-                      puts "Incorrect! You lose!!!"
+               case user_answer 
+               when 1
+                # sleep(1.5)
+                puts "Congratulations, #{@user.username}, that is the correct answer"
+                puts "You banked #{question.value_of_question}"
+               when 2 
+                puts "Incorrect! You lose!!!"
+                #  display score 
+                exit!
+               when 3 
+                puts "Incorrect! You lose!!!"
                       #  display score 
                       exit!
-                  end
+               when 4 
+                puts "Incorrect! You lose!!!"
+                      #  display score 
+                      exit!
+               when 5 
+                # 50_50
+               when 6 
+                puts "You have 30 seconds to phone a friend, make it count" 
+                    CLI.phone_a_friend 
+            #    rescue
+            #     retry  
+            #    end
+               when 7 
+                puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                CLI.ask_the_audience
+               end 
             end
 
-            def timer(seconds)
-                Timer.new(seconds) { raise Timeout::Error, "timeout!" }
-            end
+                #   if user_answer == question.correct_answer
+                #       # sleep(1.5)
+                #       puts "Congratulations, #{@user.username}, that is the correct answer"
+                #       puts "You banked #{question.value_of_question}"
+                #   # continue_game
+                #   elsif 
+                #     user_answer == "50/50"
+                #     #50_50
+                #   elsif 
+                #     user_answer == "Phone a Friend"
+                #     puts "You have 30 seconds to phone a friend, make it count" 
+                #     CLI.phone_a_friend 
+                #   elsif 
+                #     user_answer == "Ask the Audience"
+                #     puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                #     CLI.ask_the_audience
 
-            def countdown_timer 
-                30.downto(0) do |i|
+                #    elsif 
+                #       user_answer == question.incorrect_answer_1 || question.incorrect_answer_2 || question.incorrect_answer_3
+                #       puts "Incorrect! You lose!!!"
+                #       #  display score 
+                #       exit!
+                #   puts "You have run out of time"
+                #   sleep(2)
+                #   exit!
+            #     end
+            # end
+
+            # def timer(seconds)
+            #     Timer.new(seconds) { raise Timeout::Error, "timeout!" }
+            # end
+
+            def self.time_seconds 
+                t1 = Time.now 
+                puts t1.sec 
+            end 
+
+            def self.countdown_timer 
+                3.downto(0) do |i|
                     puts "00:00:#{'%02d' % i}"
                     sleep 1
+                    # "I'm sorry time is up"
                 end
             end
             
             # def 50_50 
             # end
 
-            # def phone_a_friend 
+            def self.phone_a_friend 
+                CLI.countdown_timer 
+            end
 
-            #     countdown_timer
-            # end
-
-            # def ask_the_audience
-
-            #     countdown_timer
-            # end
+            def self.ask_the_audience
+                CLI.countdown_timer
+            end
 
            
 
@@ -270,5 +319,4 @@ class CLI
                 exit!
             end
         end
-
 end
