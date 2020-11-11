@@ -165,7 +165,6 @@ class CLI
                         answers, "\n Use a lifeline:",  lifelines)
                             case user_answer 
                             when 1
-                            when 1
                                 # sleep(1.5)
                                 puts "Congratulations, #{@user.username}, that is the correct answer"
                                 puts "You banked #{question.value_of_question}"
