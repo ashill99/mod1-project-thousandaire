@@ -24,6 +24,8 @@ hard_questions =  api_data["results"].select { |q| q["difficulty"] == "hard" }
 
 #possible answers: 
 # easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
+# medium_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
+# hard_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
 
 # [{"category"=>"History",
 #   "type"=>"multiple",
