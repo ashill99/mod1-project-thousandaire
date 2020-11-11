@@ -103,14 +103,10 @@ class CLI
         end 
     end
 
-
-
     def self.start_game    
         prompt = TTY::Prompt.new
         @score = 0 
-
-        
-
+    
         CLI.question_easy
         @score += 10  #how do we not hard code this?
         CLI.question_easy
@@ -149,7 +145,14 @@ class CLI
 
 #QUESTIONS -how to avoid repeats.
     def self.question_easy 
-        question = Question.all.select { |q| q.difficulty == "easy"}.sample
+        
+        num_seconds = 15
+        start_time = Time.now.to_i
+        current_time = Time.now.to_i
+            while current_time < start_time + num_seconds
+            puts "You have 15 seconds to answer:"
+
+            question = Question.all.select { |q| q.difficulty == "easy"}.sample
 
         # i = 1
         # questions[i]
@@ -195,6 +198,8 @@ class CLI
                 # display_score 
                 exit!
             end
+            puts "I'm sorry you are out of time"
+        end
     end
 
     def self.see_scores
