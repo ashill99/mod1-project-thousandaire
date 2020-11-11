@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_09_214636) do
+ActiveRecord::Schema.define(version: 2020_11_10_220915) do
 
   create_table "game_questions", force: :cascade do |t|
     t.integer "game_id"
     t.integer "question_id"
-    t.integer "correct_answer"
+    t.string "correct_answer"
   end
 
   create_table "games", force: :cascade do |t|
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2020_11_09_214636) do
     t.boolean "lifeline_1"
     t.boolean "lifeline_2"
     t.boolean "lifeline_3"
+    t.integer "score"
   end
 
   create_table "questions", force: :cascade do |t|

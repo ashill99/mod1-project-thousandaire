@@ -15,16 +15,16 @@ u9 = User.create(username: "D", password: "1237")
 u10 = User.create(username: "E", password: "1238")
 
 #games
-game1 = Game.create(user_id: chelsey.id, lifeline_1: true, lifeline_2: true, lifeline_3: true )
-game2 = Game.create(user_id: jimmy.id, lifeline_1: true, lifeline_2: true, lifeline_3: true )
-game3 = Game.create(user_id: jackie.id, lifeline_1: true, lifeline_2: true, lifeline_3: true )
-game4 = Game.create(user_id: jimmy.id, lifeline_1: true, lifeline_2: true, lifeline_3: true )
-game5 = Game.create(user_id: erica.id, lifeline_1: true, lifeline_2: true, lifeline_3: true )
-g6 = Game.create(user_id: u6.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
-g7 = Game.create(user_id: u7.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
-g8 = Game.create(user_id: u8.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
-g9 = Game.create(user_id: u9.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
-g10 = Game.create(user_id: u10.id, lifeline_1: true, lifeline_2: true, lifeline_3: true)
+game1 = Game.create(user_id: chelsey.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0 )
+game2 = Game.create(user_id: jimmy.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0  )
+game3 = Game.create(user_id: jackie.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0  )
+game4 = Game.create(user_id: jimmy.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0  )
+game5 = Game.create(user_id: erica.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0 )
+g6 = Game.create(user_id: u6.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0 )
+g7 = Game.create(user_id: u7.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0 )
+g8 = Game.create(user_id: u8.id, lifeline_1: true, lifeline_2: true, lifeline_3: true,score: 0)
+g9 = Game.create(user_id: u9.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0)
+g10 = Game.create(user_id: u10.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0)
 
 
 #Questions
@@ -42,15 +42,15 @@ q10 = Question.create(value_of_question: 100, difficulty: "hard", question: "Wha
 
 #gamequestion
 
-gq1 = GameQuestion.create(game_id: game1.id, question_id: q4, correct_answer: 0)
-gq2 = GameQuestion.create(game_id: game2.id, question_id: q3, correct_answer: 0)
-gq3 = GameQuestion.create(game_id: game3.id, question_id: q2, correct_answer: 0)
-gq4 = GameQuestion.create(game_id: game4.id, question_id: q1, correct_answer: 0)
-gq5 = GameQuestion.create(game_id: game4.id, question_id: q5, correct_answer: 0)
+gq1 = GameQuestion.create(game_id: game1.id, question_id: q4.id, correct_answer: q4.correct_answer)
+gq2 = GameQuestion.create(game_id: game2.id, question_id: q3.id, correct_answer: q3.correct_answer)
+gq3 = GameQuestion.create(game_id: game3.id, question_id: q2.id, correct_answer: q2.correct_answer)
+gq4 = GameQuestion.create(game_id: game4.id, question_id: q1.id, correct_answer: q1.correct_answer)
+gq5 = GameQuestion.create(game_id: game4.id, question_id: q5.id, correct_answer: q5.correct_answer)
 
 
-gq6 = GameQuestion.create(game_id: g6.id, question_id: q6.id, correct_answer: 0)
-gq7 = GameQuestion.create(game_id: g7.id, question_id: q7.id, correct_answer: 0)
-gq8 = GameQuestion.create(game_id: g8.id, question_id: q8.id, correct_answer: 0)
-gq9 = GameQuestion.create(game_id: g9.id, question_id: q9.id, correct_answer: 0)
-gq10 = GameQuestion.create(game_id: g10.id, question_id: q10.id, correct_answer: 0)
+gq6 = GameQuestion.create(game_id: g6.id, question_id: q6.id, correct_answer: q6.correct_answer)
+gq7 = GameQuestion.create(game_id: g7.id, question_id: q7.id, correct_answer: q7.correct_answer)
+gq8 = GameQuestion.create(game_id: g8.id, question_id: q8.id, correct_answer: q8.correct_answer)
+gq9 = GameQuestion.create(game_id: g9.id, question_id: q9.id, correct_answer: q9.correct_answer)
+gq10 = GameQuestion.create(game_id: g10.id, question_id: q10.id, correct_answer: q10.correct_answer)
