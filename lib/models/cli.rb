@@ -144,36 +144,46 @@ class CLI
     end
 
 #QUESTIONS -how to avoid repeats.
-    def self.question_easy 
-        num_seconds = 15
-        start_time = Time.now.to_i
-        current_time = Time.now.to_i
-            puts "You have 15 seconds to answer:"
-            question = Question.all.select { |q| q.difficulty == "easy"}.sample
-            answers = [ 
-                "#{question.incorrect_answer_1}",
-                "#{question.incorrect_answer_2}",
-                "#{question.correct_answer}",
-                "#{question.incorrect_answer_3}"
-                    ].shuffle
-            user_answer = @@prompt.select("#{question.question}",
-             answers)
-                if user_answer == question.correct_answer
-                    # sleep(1.5)
-                    puts "Congratulations, #{@user.username}, that is the correct answer"
-                    puts "You banked #{question.value_of_question}"
-                # continue_game
-                elsif 
-                    user_answer != question.correct_answer
-                    puts "Incorrect! You lose!!!"
-                    #  display score 
-                    exit!
-                    
-                # elsif 
-                #     Time.now.to_i > start_time + num_seconds 
-                #     puts "I'm sorry you are out of time"
-                #     exit!
+
+    def question_easy 
+
+        puts "You have 15 seconds to answer:"
+        t1 = Time do |timer| 
+            timer.total_time.round 
+        end
+
+        puts t1
+            # while t1.sec < (t1.sec + 15)
+            #     if t1.sec > (t1.sec + 15)
+            #         puts "Sorry you have run out of time!"
+            #         exit!
+              question = Question.all.select { |q| q.difficulty == "easy"}.sample
+              answers = [ 
+                  "#{question.incorrect_answer_1}",
+                  "#{question.incorrect_answer_2}",
+                  "#{question.correct_answer}",
+                  "#{question.incorrect_answer_3}"
+                      ].shuffle
+              user_answer = @@prompt.select("#{question.question}",
+               answers)
+                  if user_answer == question.correct_answer
+                      # sleep(1.5)
+                      puts "Congratulations, #{@user.username}, that is the correct answer"
+                      puts "You banked #{question.value_of_question}"
+                  # continue_game
+                  elsif 
+                      user_answer != question.correct_answer
+                      puts "Incorrect! You lose!!!"
+                      #  display score 
+                      exit!
+                    #   if t1.sec > (t1.sec + 15)
+                    #     puts "Sorry you have run out of time!"
+                    #     exit!
                 end
+            end
+
+            def timer(seconds)
+                Timer.new(seconds) { raise Timeout::Error, "timeout!" }
             end
 
     def self.see_scores
