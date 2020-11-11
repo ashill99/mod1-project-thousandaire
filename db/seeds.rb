@@ -17,7 +17,7 @@ easy_questions = api_data["results"].select { |q| q["difficulty"] == "easy" }
 medium_questions = api_data["results"].select { |q| q["difficulty"] == "medium"}
 hard_questions =  api_data["results"].select { |q| q["difficulty"] == "hard" }
 #these work, but need to figure out how to break down incorrect_answer hash with array as value
-easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")}
+easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
 # medium_questions.each { |q| Question.create(value_of_question: 50, difficulty: "medium", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")}
 # hard_questions.each { |q| Question.create(value_of_question: 50, difficulty: "hard", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")}
 
@@ -36,15 +36,15 @@ easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "ea
 # binding.pry
 
 # # users
-# chelsey = User.create(username: 'Chelsey', password: '1234')
-# jimmy = User.create(username: "Jimmy", password: "5678")
-# jackie = User.create(username: "Jackie", password: "9090")
-# erica = User.create(username: "Erica", password: "4332")
-# u6 = User.create(username: "A", password: "1234")
-# u7 = User.create(username: "B", password: "1235")
-# u8 = User.create(username: "C", password: "1236")
-# u9 = User.create(username: "D", password: "1237")
-# u10 = User.create(username: "E", password: "1238")
+chelsey = User.create(username: 'Chelsey', password: '1234')
+jimmy = User.create(username: "Jimmy", password: "5678")
+jackie = User.create(username: "Jackie", password: "9090")
+erica = User.create(username: "Erica", password: "4332")
+u6 = User.create(username: "A", password: "1234")
+u7 = User.create(username: "B", password: "1235")
+u8 = User.create(username: "C", password: "1236")
+u9 = User.create(username: "D", password: "1237")
+u10 = User.create(username: "E", password: "1238")
 
 # #games
 # game1 = Game.create(user_id: chelsey.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: 0 )

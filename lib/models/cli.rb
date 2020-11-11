@@ -91,7 +91,11 @@ class CLI
                     puts "Take me to your leader"
                     CLI.leaderboard
                 when 4
+                    users_games = Game.all.find_all { |game| game.user_id == @user.id}
+                    # binding.pry 
+                    Game.delete(users_games) # deletes all games belonging to user 
                     User.delete(@user)
+                    # Game.delete(@user.user.id)
                     puts "You have deleted your user account."
                     system('clear')
                     CLI.log_in
@@ -140,6 +144,7 @@ class CLI
         # @@current_game.score = @score 
         CLI.update_score
         puts "Congratulations, you are officially a Thousandaire"
+        CLI.play_menu
         #    binding.pry
     end
 
@@ -274,8 +279,8 @@ class CLI
             
             def self.leaderboard 
                 all_scores = Game.all.max_by(10) { |g| g.score} 
-                user_id = all_scores.map { |game| game.user_id }
-                players = user_id.map {|id| User.find(id).username}
+                user_ids = all_scores.map { |game| game.user_id }
+                players = user_ids.map {|id| User.find(id).username}
                 scores = all_scores.map { |g| g.score }
                 # binding.pry
                 i = 0
