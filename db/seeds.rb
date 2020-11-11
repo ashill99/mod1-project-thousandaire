@@ -5,10 +5,10 @@ require 'JSON'
 
 
 
-# User.destroy_all
-# Game.destroy_all
-# Question.destroy_all
-# GameQuestion.destroy_all 
+User.destroy_all
+Game.destroy_all
+Question.destroy_all
+GameQuestion.destroy_all 
 
 api_resp = RestClient.get("https://opentdb.com/api.php?amount=50&type=multiple") 
 api_data = JSON.parse(api_resp)
@@ -17,7 +17,7 @@ api_data = JSON.parse(api_resp)
 
 binding.pry
 
-# # users
+# # # users
 # chelsey = User.create(username: 'Chelsey', password: '1234')
 # jimmy = User.create(username: "Jimmy", password: "5678")
 # jackie = User.create(username: "Jackie", password: "9090")
