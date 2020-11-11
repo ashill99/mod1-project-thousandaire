@@ -118,6 +118,7 @@ class CLI
         prompt = TTY::Prompt.new
         @score = 0 
         @this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
+
         CLI.question_easy
         @score += 10 
         CLI.update_score
@@ -171,6 +172,69 @@ class CLI
                         
                         user_answer = @@prompt.select("#{question.question}",
                         answers, "\n Use a lifeline:",  lifelines)
+        
+        # p @score 
+        # p @this_game
+        
+        # answers = [ 
+        #     { "#{Question.first.incorrect_answer_1}" => 1},
+        #     { "#{Question.first.incorrect_answer_2}" => 2},
+        #     { "#{Question.first.correct_answer}" => 3},
+        #     { "#{Question.first.incorrect_answer_3}" => 4}
+        # ]
+        # user_answer = @@prompt.select("#{Question.first.question}",
+        #  answers)
+        # if user_answer == Question.first.correct_answer
+        #     continue_game
+        # else 
+        #     puts "Incorrect! You lose!!!"
+        #     # display_score 
+    end
+
+#QUESTIONS -how to avoid repeats.
+    def self.question_easy 
+        question = Question.all.select { |q| q.difficulty == "easy"}.sample
+        GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
+        binding.pry
+     
+        answers = [ 
+                "#{question.incorrect_answer_1}",
+                "#{question.incorrect_answer_2}",
+                "#{question.correct_answer}",
+                "#{question.incorrect_answer_3}"
+    ].shuffle
+            user_answer = @@prompt.select("#{question.question}",
+             answers)
+            
+            if user_answer == question.correct_answer
+                # sleep(1.5)
+                puts "Congratulations, #{@user.username}, that is the correct answer"
+                puts "You banked #{question.value_of_question}"
+               when 2 
+                puts "Incorrect! You lose!!!"
+                #  display score 
+                exit!
+               when 3 
+                puts "Incorrect! You lose!!!"
+                      #  display score 
+                      exit!
+               when 4 
+                puts "Incorrect! You lose!!!"
+                      #  display score 
+                      exit!
+               when 5 
+                # 50_50
+               when 6 
+                puts "You have 30 seconds to phone a friend, make it count" 
+                    CLI.phone_a_friend 
+            #    rescue
+            #     retry  
+            #    end
+               when 7 
+                puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                CLI.ask_the_audience
+               end 
+            end
 
                             case user_answer 
                             when 1
