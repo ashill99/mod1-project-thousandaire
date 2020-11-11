@@ -145,62 +145,36 @@ class CLI
 
 #QUESTIONS -how to avoid repeats.
     def self.question_easy 
-        
         num_seconds = 15
         start_time = Time.now.to_i
         current_time = Time.now.to_i
-            while current_time < start_time + num_seconds
             puts "You have 15 seconds to answer:"
-
             question = Question.all.select { |q| q.difficulty == "easy"}.sample
-
-        # i = 1
-        # questions[i]
-        # i+= 1
-        # binding.pry
-        # question_one = []
-        # question_two = []
-        # question_three = []
-        # i = 0 
-        # while i < questions.length 
-        #     item = questions[i]
-        #     item << question_one 
-        #         if question_one == item 
-        #             item << question_two 
-        #             if question_two == item 
-        #                 item << question_3
-        #     i += 1
-        #             end
-        #         end
-        #     end
-     
-        answers = [ 
+            answers = [ 
                 "#{question.incorrect_answer_1}",
                 "#{question.incorrect_answer_2}",
                 "#{question.correct_answer}",
                 "#{question.incorrect_answer_3}"
-    ].shuffle
+                    ].shuffle
             user_answer = @@prompt.select("#{question.question}",
              answers)
-            
-            if user_answer == question.correct_answer
-                # sleep(1.5)
-                puts "Congratulations, #{@user.username}, that is the correct answer"
-                #add question value to user high score 
-                puts "You banked #{question.value_of_question}"
-
-                # this_game.score += question.value_of_question
-                # i += me.sc1 
-
+                if user_answer == question.correct_answer
+                    # sleep(1.5)
+                    puts "Congratulations, #{@user.username}, that is the correct answer"
+                    puts "You banked #{question.value_of_question}"
                 # continue_game
-            else 
-                puts "Incorrect! You lose!!!"
-                # display_score 
-                exit!
+                elsif 
+                    user_answer != question.correct_answer
+                    puts "Incorrect! You lose!!!"
+                    #  display score 
+                    exit!
+                    
+                # elsif 
+                #     Time.now.to_i > start_time + num_seconds 
+                #     puts "I'm sorry you are out of time"
+                #     exit!
+                end
             end
-            puts "I'm sorry you are out of time"
-        end
-    end
 
     def self.see_scores
         players_games = Game.all.find_all { |g| g.user_id == @user.id}

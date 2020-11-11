@@ -13,5 +13,4 @@ gem 'tty-font'
 # gem 'term-images'
 gem 'colorize'
 gem 'rest-client'
-
-
+gem 'timer'
