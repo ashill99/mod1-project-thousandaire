@@ -103,17 +103,6 @@ class CLI
         end 
     end
 
-#there are 10 rounds 
-# 1. 50 - easy
-# 2. 50 - easy 
-# 3 50  - easy
-# 4. 100 - medium 
-# 5. 100 -medium 
-# 6. 100 -medium 
-# 7. 100 -medium 
-# 8. 150 -hard 
-# 9. 150 -hard
-# 10. 150 -hard
 
 
     def self.start_game    
