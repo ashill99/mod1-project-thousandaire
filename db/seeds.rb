@@ -10,7 +10,6 @@ Game.destroy_all
 Question.destroy_all
 GameQuestion.destroy_all 
 
-#could I just pull over 3 links for diff difficulties? all at 50 a piece?
 api_resp_easy = RestClient.get("https://opentdb.com/api.php?amount=50&difficulty=easy&type=multiple")
 api_easy_data = JSON.parse(api_resp_easy)
 
@@ -29,9 +28,9 @@ api_hard_data = JSON.parse(api_resp_hard)
 # medium_questions = api_data["results"].select { |q| q["difficulty"] == "medium"}
 # hard_questions =  api_data["results"].select { |q| q["difficulty"] == "hard" }
 
-api_easy_data["results"].each { |q| Question.create(value_of_question: 50, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
-api_medium_data["results"].each { |q| Question.create(value_of_question: 50, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
-api_hard_data["results"].each { |q| Question.create(value_of_question: 50, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
+api_easy_data["results"].each { |q| Question.create(value_of_question: 10, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
+api_medium_data["results"].each { |q| Question.create(value_of_question: 30, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
+api_hard_data["results"].each { |q| Question.create(value_of_question: 100, difficulty: q["difficulty"], question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
 
 # medium_questions.each { |q| Question.create(value_of_question: 100, difficulty: "medium", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
 # hard_questions.each { |q| Question.create(value_of_question: 150, difficulty: "hard", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
