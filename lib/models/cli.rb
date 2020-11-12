@@ -33,11 +33,11 @@ class CLI
     end 
 
     def display_menu 
-            choices = [ 
-                { "Log in" => 1},
-                { "Create new user" => 2},
-                { "See Leaderboard" => 3},
-                { "Quit" => 4}
+        choices = [ 
+            { "Log in" => 1},
+            { "Create new user" => 2},
+            { "See Leaderboard" => 3},
+            { "Quit" => 4}
             ]
             user_input = @@prompt.select("What would you like to do?", choices)
                 case user_input 
@@ -49,18 +49,19 @@ class CLI
                     CLI.leaderboard
                 when 4
                     exit! 
-                end
+        end
     end
 
     def self.log_in
         prompt = TTY::Prompt.new
         username = prompt.ask("Welcome back! Remind us of your name?")
         password = prompt.mask("Enter your password:")
-        if User.find_by(username: username, password: password)
+        if  User.find_by(username: username, password: password)
             @user = User.find_by(username: username, password: password)
             @user
             CLI.play_menu
-        elsif User.find_by(username: username)
+        elsif 
+            User.find_by(username: username)
             puts "Incorrect Password, please try again:"
             CLI.log_in
             # quit if entered 3 times?
@@ -73,33 +74,33 @@ class CLI
 
     def self.play_menu 
         choices = [ 
-                { "Play a new game" => 1},
-                { "See high scores" => 2},
-                { "See leaderboard" => 3},
-                { "Delete your account" => 4},
-                { "Quit" => 5}
+            { "Play a new game" => 1},
+            { "See high scores" => 2},
+            { "See leaderboard" => 3},
+            { "Delete your account" => 4},
+            { "Quit" => 5}
             ]
             user_input = @@prompt.select("Welcome! Are you ready to win big?", choices)
-                case user_input 
-                when 1 
-                    puts "Get your trigger finger ready!"
-                    CLI.start_game 
-                when 2 
-                    puts "The scores on the doors are..."
-                    CLI.see_scores
-                when 3
-                    CLI.leaderboard
-                when 4
-                    users_games = Game.all.find_all { |game| game.user_id == @user.id}
-                    Game.delete(users_games) # deletes all games belonging to user 
-                    User.delete(@user)
-                    puts "You have deleted your user account."
-                    system('clear')
-                    CLI.log_in
-                when 5
-                    puts "The pressure got too much for you huh?"
-                    exit!
-                end
+            case user_input 
+            when 1 
+                puts "Get your trigger finger ready!"
+                CLI.start_game 
+            when 2 
+                puts "The scores on the doors are..."
+                CLI.see_scores
+            when 3
+                CLI.leaderboard
+            when 4
+                users_games = Game.all.find_all { |game| game.user_id == @user.id}
+                Game.delete(users_games) # deletes all games belonging to user 
+                User.delete(@user)
+                puts "You have deleted your user account."
+                system('clear')
+                CLI.log_in
+            when 5
+                puts "The pressure got too much for you huh?"
+                exit!
+        end
     end
 
     def self.new_user_create
