@@ -8,27 +8,30 @@ require "pry"
 
 class CLI
 
+
     @@current_game = nil 
     @@prompt = TTY::Prompt.new
 
     def greet 
-        @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
-        @theme_tune.play
-        # pid = fork { exec ‘afplay’, './lib/models/game_sounds/millionaire_intro.mp3' } 
-
+        @logo = Image.new('./lib/models/images/millionaire_logo.png')
+        # @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
+        # @theme_tune.play
+        @logo
         pastel = Pastel.new
         font = TTY::Font.new(:starwars)
         font2 = TTY::Font.new(:doom)
+        # sleep(1.5)
         puts pastel.yellow(font2.write("                                                                WHO"))        
-        # sleep(0.5)
+        # sleep(1.5)
         puts ""
         puts pastel.yellow(font2.write("                 WANTS                                              TO"))  
-        # sleep(0.5)
+        # sleep(1.5)
         puts pastel.yellow(font2.write("BE                                                                                                              A"))                                                                           
-        # sleep(0.5)
+        # sleep(1.5)
         puts ""
         puts pastel.green(font.write("         THOUSANDAIRE"))
         puts ""
+        # sleep(1.5)
     end
 
     def run 
@@ -69,7 +72,6 @@ class CLI
             User.find_by(username: username)
             puts "Incorrect Password, please try again:"
             CLI.log_in
-            # quit if entered 3 times?
         else 
             system('clear')
             puts "hmm...we can't find you. Create a new user? "
@@ -131,42 +133,46 @@ class CLI
         CLI.question_easy
         CLI.question_correct
 
-        CLI.question_easy
-        CLI.question_correct
+        # CLI.question_easy
+        # CLI.question_correct
 
-        CLI.question_easy
-        CLI.question_correct
+        # CLI.question_easy
+        # CLI.question_correct
 
-        CLI.question_medium
-        CLI.question_correct
+        # CLI.question_medium
+        # CLI.question_correct
 
-        CLI.question_medium
-        CLI.question_correct
+        # CLI.question_medium
+        # CLI.question_correct
 
-        CLI.question_medium
-        CLI.question_correct
+        # CLI.question_medium
+        # CLI.question_correct
 
-        CLI.question_medium
-        CLI.question_correct
+        # CLI.question_medium
+        # CLI.question_correct
 
-        CLI.question_hard
-        CLI.question_correct
+        # CLI.question_hard
+        # CLI.question_correct
 
-        CLI.question_hard
-        CLI.question_correct
+        # CLI.question_hard
+        # CLI.question_correct
 
-        CLI.question_hard
-        CLI.question_correct
+        # CLI.question_hard
+        # CLI.question_correct
 
-        # @@current_game.score = @score 
-        puts "Congratulations, you are officially a Thousandaire"
-        # sleep(1)
+        @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
+        @theme_tune.play
+
+        puts "Congratulations, you are officially a" + " Thousandaire".colorize(:green)
+        puts "\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}"
+        sleep(5)
+
         CLI.play_menu
     end
 
     def self.question_correct 
         @question_number += 1
-        @score += @question.value_of_question 
+        @score += @new_value
         CLI.update_score 
     end
 
@@ -200,26 +206,30 @@ class CLI
                     loop do
                         system('clear')
                         puts "Question #{@question_number}: \n\n"
-                        puts "For $#{@question.value_of_question}\n\n"
+                        @new_value = @question.value_of_question + (@question_number * 10)
+                        puts "For $#{@new_value}\n\n"
                         user_answer = @@prompt.select("#{@question.question}",
                         answers, "\n Use a lifeline:",  lifelines, timer: 3)
 
                             case user_answer 
                             when 1
-                                system('clear')
-                                puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                puts "You banked $#{@question.value_of_question}"
-                                current_total = @score + @question.value_of_question
-                                puts "Your total winnings are $#{current_total}."
-                                sleep(2.5)
+                                sleep(1)
+                                CLI.final_answer
+                                CLI.correct_answer
                             break
                             when 2 
+                                sleep(1)
+                                CLI.final_answer
                             CLI.incorrect_answer
                             exit
                            when 3 
+                            sleep(1)
+                            CLI.final_answer
                                   CLI.incorrect_answer
                                   exit
                            when 4 
+                            sleep(1)
+                            CLI.final_answer
                                 CLI.incorrect_answer
                                   exit
                            when 5    
@@ -228,26 +238,30 @@ class CLI
                                 answers_5050)
                                     if user_answer == 1
                                         @this_game.lifeline_1 = false 
+                                        CLI.correct_answer
                                         break 
                                     else 
                                     system('clear')
                                     puts "You had a 50/50 chance and you blew it!"
                                     puts "You earned $#{@this_game.score} this game!."
-                                    puts "To collect your winnings please contact Flatiron School."
-                                    # sleep(1)
-                                    exit
+                                    puts "To collect your winnings please contact Flatiron School. \u{1F4b0}"
+                                    user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
+                                    CLI.play_menu
                                 end 
                                 else 
                                     system('clear')
-                                    puts "You have already used 50/50!"
+                                    puts "\n\n You have already used 50/50!\n\n "
+                                    sleep (1)
                             end
                            when 6 
                             if @this_game.lifeline_2 == true 
                             puts "You have 30 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
                                 @this_game.lifeline_2 = false 
-                            else 
-                                puts "\n\n You have already phoned your friend! \n\n "
+                            elsif @this_game.lifeline_2 == false  
+                                system('clear') 
+                                puts "\n\n You have already phoned your friend! \n\n"
+                                sleep(1)
                             end
                            when 7 
                             if @this_game.lifeline_3 == true
@@ -255,9 +269,27 @@ class CLI
                                 CLI.ask_the_audience
                                 @this_game.lifeline_3 = false
                             else 
-                                puts "\n\n You have already asked the audience! \n\n"
+                                system('clear')
+                                puts "\n\n You have already asked the audience!\n\n"
+                                sleep(1)
                             end
                         end
+                    end
+                end
+
+                def self.correct_answer
+                    puts "Congratulations, #{@user.username}, that is the correct answer \n"
+                                puts "You banked $#{@new_value}"
+                                current_total = @score + @new_value
+                                puts "Your total winnings are $#{current_total}."
+                                sleep(2.5)
+                end
+
+                def self.final_answer
+                    user_input = @@prompt.select("...Is that your final answer?", "Yes", "No")
+                    if user_input == "Yes" 
+                    elsif user_input == "No" 
+                        CLI.question_method #its shuffling the questions if say 'no'
                     end
                 end
 
@@ -282,25 +314,16 @@ class CLI
                         @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
                          # binding.pry
                         CLI.question_method 
-                    end      
+                    end       
 
-            # def timer(seconds)
-            #     Timer.new(seconds) { raise Timeout::Error, "timeout!" }
+            # def check_phone_a_friend 
+            #     Game.all.select { |game| game.user_id == @user}
             # end
-
-
-            def check_phone_a_friend 
-                Game.all.select { |game| game.user_id == @user}
-            end
-
-            def self.time_seconds 
-                t1 = Time.now 
-                puts t1.sec 
-            end 
 
             def self.countdown_timer 
                 3.downto(0) do |i|
                     puts "00:00:#{'%02d' % i}"
+                    sleep(1)
                 end
                 system('clear')
                 puts "Your time is up! Please answer the question!"
