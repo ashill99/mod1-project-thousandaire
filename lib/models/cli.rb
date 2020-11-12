@@ -13,30 +13,29 @@ class CLI
     @@prompt = TTY::Prompt.new
 
     def greet 
-        @logo = Image.new('./lib/models/images/millionaire_logo.png')
-        # @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
-        # @theme_tune.play
-        @logo
+        @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
+        @theme_tune.play
         pastel = Pastel.new
         font = TTY::Font.new(:starwars)
         font2 = TTY::Font.new(:doom)
-        # sleep(1.5)
+        sleep(1.5)
         puts pastel.yellow(font2.write("                                                                WHO"))        
-        # sleep(1.5)
+        sleep(1.5)
         puts ""
         puts pastel.yellow(font2.write("                 WANTS                                              TO"))  
-        # sleep(1.5)
-        puts pastel.yellow(font2.write("BE                                                                                                              A"))                                                                           
-        # sleep(1.5)
+        sleep(1.5)
+        puts pastel.yellow(font2.write("BE                                                                                                                    A"))                                                                           
+        sleep(1.5)
         puts ""
-        puts pastel.green(font.write("         THOUSANDAIRE"))
+        puts pastel.green(font.write("    THOUSANDAIRE"))
         puts ""
-        # sleep(1.5)
+        puts "\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\u{1F4B8}\n\n "
+        sleep(1.5)
     end
 
     def run 
         greet
-        # sleep(1)
+        sleep(1)
         display_menu
     end 
 
@@ -92,9 +91,9 @@ class CLI
             case user_input 
             when 1 
                 puts "Get your trigger finger ready!"
+                sleep(1)
                 CLI.start_game 
             when 2 
-                puts "The scores on the doors are..."
                 CLI.see_scores
             when 3
                 CLI.leaderboard
@@ -163,8 +162,16 @@ class CLI
         @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
         @theme_tune.play
 
-        puts "Congratulations, you are officially a" + " Thousandaire".colorize(:green)
-        puts "\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}\u{1F4b0}"
+        puts "Congratulations! \n\n".colorize(:green)
+        sleep(1)
+        puts "you are \n\n".colorize(:green)
+        sleep(1)
+        puts "officially a \n\n".colorize(:green)
+        sleep(1)
+        pastel = Pastel.new
+        font = TTY::Font.new(:starwars)
+        puts pastel.green(font.write("THOUSANDAIRE"))
+        200.times { print "\u{1F4b0}" }
         sleep(5)
 
         CLI.play_menu
@@ -255,7 +262,8 @@ class CLI
                             end
                            when 6 
                             if @this_game.lifeline_2 == true 
-                            puts "You have 30 seconds to phone a friend, make it count" 
+                            200.times { print "\u{260E}" }
+                            puts "\n\n You have 15 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
                                 @this_game.lifeline_2 = false 
                             elsif @this_game.lifeline_2 == false  
@@ -265,7 +273,9 @@ class CLI
                             end
                            when 7 
                             if @this_game.lifeline_3 == true
-                                puts "You have 30 seconds to ask the audience, let's hope they know!" 
+                                200.times { print "\u{1F64B}" } 
+                                puts "\n\n You have 15 seconds to ask the audience, let's hope they know!" 
+                                sleep(1)
                                 CLI.ask_the_audience
                                 @this_game.lifeline_3 = false
                             else 
@@ -287,8 +297,10 @@ class CLI
 
                 def self.final_answer
                     user_input = @@prompt.select("...Is that your final answer?", "Yes", "No")
-                    if user_input == "Yes" 
-                    elsif user_input == "No" 
+                    if 
+                        user_input == "Yes" 
+                    elsif 
+                        user_input == "No" 
                         CLI.question_method #its shuffling the questions if say 'no'
                     end
                 end
@@ -307,7 +319,7 @@ class CLI
                 @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
             # binding.pry
             CLI.question_method 
-                        end      
+            end      
 
                     def self.question_hard
                         @question = Question.all.select { |q| q.difficulty == "hard"}.sample
@@ -340,7 +352,8 @@ class CLI
             
             def self.leaderboard 
                 system('clear')
-                puts "Take me to your leader:"
+                font = TTY::Font.new(:doom)
+                puts font.write("Take Me To Your Leader...")
                 all_scores = Game.all.max_by(10) { |g| g.score} 
                 user_ids = all_scores.map { |game| game.user_id }
                 players = user_ids.map {|id| User.find(id).username}
@@ -349,11 +362,14 @@ class CLI
                 while i < 10
                  puts "#{i + 1}. #{players[i]}: $#{scores[i]}"
                  i +=1
+                 @@prompt.keypress("Press any key to return to menu")
+                CLI.play_menu
                 end 
              end
         
              def self.see_scores
-                system('clear')
+                font = TTY::Font.new(:doom)
+                puts font.write("The scores on the doors are...")
                 players_games = Game.all.find_all { |g| g.user_id == @user.id}
                 p1 = players_games.map { |pg| pg.score}
                 p2 = p1.max(5)
