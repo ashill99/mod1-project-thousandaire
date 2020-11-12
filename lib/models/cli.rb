@@ -1,4 +1,5 @@
 require "tty-prompt"
+require 'ruby2d'
 
 prompt = TTY::Prompt.new
 
@@ -11,6 +12,10 @@ class CLI
     @@prompt = TTY::Prompt.new
 
     def greet 
+        @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
+        @theme_tune.play
+        # pid = fork { exec ‘afplay’, './lib/models/game_sounds/millionaire_intro.mp3' } 
+
         pastel = Pastel.new
         font = TTY::Font.new(:starwars)
         font2 = TTY::Font.new(:doom)
@@ -73,6 +78,7 @@ class CLI
     end 
 
     def self.play_menu 
+        system('clear')
         choices = [ 
             { "Play a new game" => 1},
             { "See high scores" => 2},
@@ -80,7 +86,7 @@ class CLI
             { "Delete your account" => 4},
             { "Quit" => 5}
             ]
-            user_input = @@prompt.select("Welcome! Are you ready to win big?", choices)
+            user_input = @@prompt.select("Welcome #{@user.username}! Are you ready to win big?", choices)
             case user_input 
             when 1 
                 puts "Get your trigger finger ready!"
@@ -174,7 +180,6 @@ class CLI
             CLI.question_method 
     end 
     
-
         def self.question_method 
             answers = [ 
                   {"#{@question.correct_answer}" => 1},
@@ -209,21 +214,13 @@ class CLI
                                 sleep(2.5)
                             break
                             when 2 
-                            puts "Incorrect! You lose!!!"
-                            puts "You earned $#{@this_game.score} this game!."
-                            puts "To collect your winnings please contact Flatiron School."
+                            CLI.incorrect_answer
                             exit
                            when 3 
-                            puts "Incorrect! You lose!!!"
-                                  puts "You earned $#{@this_game.score} this game!."
-                                  puts "To collect your winnings please contact Flatiron School."
-
+                                  CLI.incorrect_answer
                                   exit
                            when 4 
-                            puts "Incorrect! You lose!!!"
-                                  puts "You earned $#{@this_game.score} this game!."
-                                  puts "To collect your winnings please contact Flatiron School."
-
+                                CLI.incorrect_answer
                                   exit
                            when 5    
                                 if @this_game.lifeline_1 == true 
@@ -264,6 +261,15 @@ class CLI
                     end
                 end
 
+                def self.incorrect_answer 
+                    system('clear')
+                    puts "Incorrect! You lose!!!"
+                    puts "You earned $#{@this_game.score} this game!."
+                    puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
+                    user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
+                    CLI.play_menu 
+                end
+
             def self.question_medium
                 @question = Question.all.select { |q| q.difficulty == "medium"}.sample
                 @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
@@ -295,9 +301,10 @@ class CLI
             def self.countdown_timer 
                 3.downto(0) do |i|
                     puts "00:00:#{'%02d' % i}"
-                    sleep 1
-                    # "I'm sorry time is up"
                 end
+                system('clear')
+                puts "Your time is up! Please answer the question!"
+                sleep 1.5
             end
 
             def self.phone_a_friend 
@@ -317,69 +324,17 @@ class CLI
                 scores = all_scores.map { |g| g.score }
                 i = 0
                 while i < 10
-                 puts "#{i + 1}. #{players[i]}: #{scores[i]}"
+                 puts "#{i + 1}. #{players[i]}: $#{scores[i]}"
                  i +=1
                 end 
              end
         
              def self.see_scores
+                system('clear')
                 players_games = Game.all.find_all { |g| g.user_id == @user.id}
                 p1 = players_games.map { |pg| pg.score}
                 p2 = p1.max(5)
                 puts "Your top scores are:\n"  
-                p2.each.with_index(1) do |s, i| puts "#{i}. #{s}" end
+                p2.each.with_index(1) do |s, i| puts "#{i}. $#{s}" end
             end 
-
-    # def self.question_medium 
-    #     question = Question.all.select { |q| q.difficulty == "medium"}.sample
-     
-    #     answers = [ 
-    #             "#{question.incorrect_answer_1}",
-    #             "#{question.incorrect_answer_2}",
-    #             "#{question.correct_answer}",
-    #             "#{question.incorrect_answer_3}"
-    # ].shuffle
-    #         user_answer = @@prompt.select("#{question.question}",
-    #          answers)
-    #         #  binding.pry
-    #         if user_answer == question.correct_answer
-    #             # sleep(1.5)
-    #             puts "Congratulations, that is the correct answer"
-    #             puts "You banked #{question.value_of_question}"
-    #             #add question value to user high score 
-    #             # total = @this_game.score += question.value_of_question
-
-    #             # continue_game
-    #         else 
-    #             puts "Incorrect! You lose!!!"
-    #             # display_score 
-    #             exit!
-    #         end
-    #     end
-    
-    # def self.question_hard
-    #     question = Question.all.select { |q| q.difficulty == "hard"}.sample
-     
-    #     answers = [ 
-    #             "#{question.incorrect_answer_1}",
-    #             "#{question.incorrect_answer_2}",
-    #             "#{question.correct_answer}",
-    #             "#{question.incorrect_answer_3}"
-    # ].shuffle
-    #         user_answer = @@prompt.select("#{question.question}",
-    #          answers)
-    #         #  binding.pry
-    #         if user_answer == question.correct_answer
-    #             # sleep(1.5)
-    #             puts "Congratulations, that is the correct answer"
-    #             #add question value to user high score 
-    #             # User.score += question.value_of_question
-
-    #             # continue_game
-    #         else 
-    #             puts "Incorrect! You lose!!!"
-    #             # display_score 
-    #             exit!
-    #         end
-    #     end
 end
