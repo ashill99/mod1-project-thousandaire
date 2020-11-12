@@ -170,7 +170,12 @@ class CLI
 
     def self.question_easy 
             @question = Question.all.select { |q| q.difficulty == "easy"}.sample
-            # GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
+            @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
+            CLI.question_method 
+    end 
+    
+
+        def self.question_method 
             answers = [ 
                   {"#{@question.correct_answer}" => 1},
                   {"#{@question.incorrect_answer_1}" => 2},
@@ -179,7 +184,7 @@ class CLI
                       ].shuffle
             lifelines = [
                     {"50/50" => 5},
-                    {"Phone a Friend" => 6},
+                    {"Phone a Friend" => 6}, 
                     {"Ask the Audience" => 7},
                     ]
             answers_5050 = [
@@ -190,26 +195,35 @@ class CLI
                     loop do
                         system('clear')
                         puts "Question #{@question_number}: \n\n"
+                        puts "For $#{@question.value_of_question}\n\n"
                         user_answer = @@prompt.select("#{@question.question}",
-                        answers, "\n Use a lifeline:",  lifelines)
+                        answers, "\n Use a lifeline:",  lifelines, timer: 3)
 
                             case user_answer 
                             when 1
-                                # sleep(1.5)
+                                system('clear')
                                 puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                puts "You banked #{@question.value_of_question}"
+                                puts "You banked $#{@question.value_of_question}"
+                                current_total = @score + @question.value_of_question
+                                puts "Your total winnings are $#{current_total}."
+                                sleep(2.5)
                             break
                             when 2 
                             puts "Incorrect! You lose!!!"
-                            puts "You scored #{@this_game.score} points."
+                            puts "You earned $#{@this_game.score} this game!."
+                            puts "To collect your winnings please contact Flatiron School."
                             exit
                            when 3 
                             puts "Incorrect! You lose!!!"
-                                  puts "You scored #{@this_game.score} points."
+                                  puts "You earned $#{@this_game.score} this game!."
+                                  puts "To collect your winnings please contact Flatiron School."
+
                                   exit
                            when 4 
                             puts "Incorrect! You lose!!!"
-                                  puts "You scored #{@this_game.score} points."
+                                  puts "You earned $#{@this_game.score} this game!."
+                                  puts "To collect your winnings please contact Flatiron School."
+
                                   exit
                            when 5    
                                 if @this_game.lifeline_1 == true 
@@ -221,7 +235,8 @@ class CLI
                                     else 
                                     system('clear')
                                     puts "You had a 50/50 chance and you blew it!"
-                                    puts "You scored #{@this_game.score} points."
+                                    puts "You earned $#{@this_game.score} this game!."
+                                    puts "To collect your winnings please contact Flatiron School."
                                     # sleep(1)
                                     exit
                                 end 
@@ -245,171 +260,23 @@ class CLI
                             else 
                                 puts "\n\n You have already asked the audience! \n\n"
                             end
-                           end
                         end
-                    end      
+                    end
+                end
 
             def self.question_medium
                 @question = Question.all.select { |q| q.difficulty == "medium"}.sample
-                # GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
-                answers = [ 
-                      {"#{@question.correct_answer}" => 1},
-                      {"#{@question.incorrect_answer_1}" => 2},
-                      {"#{@question.incorrect_answer_2}" => 3},
-                      {"#{@question.incorrect_answer_3}" => 4}
-                          ].shuffle
-                lifelines = [
-                        {"50/50" => 5},
-                        {"Phone a Friend" => 6},
-                        {"Ask the Audience" => 7},
-                        ]
-                answers_5050 = [
-                        {"#{@question.correct_answer}" => 1},
-                        {"#{@question.incorrect_answer_1}" => 2}
-                    ].shuffle
-    
-                        loop do
-                            system('clear')
-                            puts "Question #{@question_number}: \n\n"
-                            user_answer = @@prompt.select("#{@question.question}",
-                            answers, "\n Use a lifeline:",  lifelines)
-    
-                                case user_answer 
-                                when 1
-                                    # sleep(1.5)
-                                    puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                    puts "You banked #{@question.value_of_question}"
-                                break
-                                when 2 
-                                puts "Incorrect! You lose!!!"
-                                puts "You scored #{@this_game.score} points."
-                                exit
-                               when 3 
-                                puts "Incorrect! You lose!!!"
-                                      puts "You scored #{@this_game.score} points."
-                                      exit
-                               when 4 
-                                puts "Incorrect! You lose!!!"
-                                      puts "You scored #{@this_game.score} points."
-                                      exit
-                               when 5    
-                                    if @this_game.lifeline_1 == true 
-                                    puts user_answer = @@prompt.select("#{@question.question}",
-                                    answers_5050)
-                                        if user_answer == 1
-                                            @this_game.lifeline_1 = false 
-                                            break 
-                                        else 
-                                        system('clear')
-                                        puts "You had a 50/50 chance and you blew it!"
-                                        puts "You scored #{@this_game.score} points."
-                                        # sleep(1)
-                                        exit
-                                    end 
-                                    else 
-                                        system('clear')
-                                        puts "You have already used 50/50!"
-                                end
-                               when 6 
-                                if @this_game.lifeline_2 == true 
-                                puts "You have 30 seconds to phone a friend, make it count" 
-                                    CLI.phone_a_friend 
-                                    @this_game.lifeline_2 = false 
-                                else 
-                                    puts "\n\n You have already phoned your friend! \n\n "
-                                end
-                               when 7 
-                                if @this_game.lifeline_3 == true
-                                    puts "You have 30 seconds to ask the audience, let's hope they know!" 
-                                    CLI.ask_the_audience
-                                    @this_game.lifeline_3 = false
-                                else 
-                                    puts "\n\n You have already asked the audience! \n\n"
-                                end
-                               end
-                            end
+                @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
+            # binding.pry
+            CLI.question_method 
                         end      
 
                     def self.question_hard
                         @question = Question.all.select { |q| q.difficulty == "hard"}.sample
-                        # GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
-                        answers = [ 
-                              {"#{@question.correct_answer}" => 1},
-                              {"#{@question.incorrect_answer_1}" => 2},
-                              {"#{@question.incorrect_answer_2}" => 3},
-                              {"#{@question.incorrect_answer_3}" => 4}
-                                  ].shuffle
-                        lifelines = [
-                                {"50/50" => 5},
-                                {"Phone a Friend" => 6},
-                                {"Ask the Audience" => 7},
-                                ]
-                        answers_5050 = [
-                                {"#{@question.correct_answer}" => 1},
-                                {"#{@question.incorrect_answer_1}" => 2}
-                            ].shuffle
-            
-                                loop do
-                                    system('clear')
-                                    puts "Question #{@question_number}: \n\n"
-                                    user_answer = @@prompt.select("#{@question.question}",
-                                    answers, "\n Use a lifeline:",  lifelines)
-            
-                                        case user_answer 
-                                        when 1
-                                            # sleep(1.5)
-                                            puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                            puts "You banked #{@question.value_of_question}"
-                                        break
-                                        when 2 
-                                        puts "Incorrect! You lose!!!"
-                                        puts "You scored #{@this_game.score} points."
-                                        exit
-                                       when 3 
-                                        puts "Incorrect! You lose!!!"
-                                              puts "You scored #{@this_game.score} points."
-                                              exit
-                                       when 4 
-                                        puts "Incorrect! You lose!!!"
-                                              puts "You scored #{@this_game.score} points."
-                                              exit
-                                       when 5    
-                                            if @this_game.lifeline_1 == true 
-                                            puts user_answer = @@prompt.select("#{@question.question}",
-                                            answers_5050)
-                                                if user_answer == 1
-                                                    @this_game.lifeline_1 = false 
-                                                    break 
-                                                else 
-                                                system('clear')
-                                                puts "You had a 50/50 chance and you blew it!"
-                                                puts "You scored #{@this_game.score} points."
-                                                # sleep(1)
-                                                exit
-                                            end 
-                                            else 
-                                                system('clear')
-                                                puts "You have already used 50/50!"
-                                        end
-                                       when 6 
-                                        if @this_game.lifeline_2 == true 
-                                        puts "You have 30 seconds to phone a friend, make it count" 
-                                            CLI.phone_a_friend 
-                                            @this_game.lifeline_2 = false 
-                                        else 
-                                            puts "\n\n You have already phoned your friend! \n\n "
-                                        end
-                                       when 7 
-                                        if @this_game.lifeline_3 == true
-                                            puts "You have 30 seconds to ask the audience, let's hope they know!" 
-                                            CLI.ask_the_audience
-                                            @this_game.lifeline_3 = false
-                                        else 
-                                            puts "\n\n You have already asked the audience! \n\n"
-                                        end
-                                       end
-                                    end
-                                end      
+                        @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
+                         # binding.pry
+                        CLI.question_method 
+                    end      
 
             # def timer(seconds)
             #     Timer.new(seconds) { raise Timeout::Error, "timeout!" }
