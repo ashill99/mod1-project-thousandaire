@@ -123,7 +123,7 @@ class CLI
         @this_game = Game.create(user_id: @user.id, lifeline_1: true, lifeline_2: true, lifeline_3: true, score: @score)
         @question_number = 1 
         CLI.question_easy
-        @score += 10 
+        @score += @question.value_of_question
         @question_number += 1
         CLI.update_score
         CLI.question_easy
@@ -153,13 +153,13 @@ class CLI
     end
 
     def self.question_easy 
-            question = Question.all.select { |q| q.difficulty == "easy"}.sample
+            @question = Question.all.select { |q| q.difficulty == "easy"}.sample
             # GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
             answers = [ 
-                  {"#{question.correct_answer}" => 1},
-                  {"#{question.incorrect_answer_1}" => 2},
-                  {"#{question.incorrect_answer_2}" => 3},
-                  {"#{question.incorrect_answer_3}" => 4}
+                  {"#{@question.correct_answer}" => 1},
+                  {"#{@question.incorrect_answer_1}" => 2},
+                  {"#{@question.incorrect_answer_2}" => 3},
+                  {"#{@question.incorrect_answer_3}" => 4}
                       ].shuffle
             lifelines = [
                     {"50/50" => 5},
@@ -167,21 +167,21 @@ class CLI
                     {"Ask the Audience" => 7},
                     ]
             answers_5050 = [
-                    {"#{question.correct_answer}" => 1},
-                    {"#{question.incorrect_answer_1}" => 2}
+                    {"#{@question.correct_answer}" => 1},
+                    {"#{@question.incorrect_answer_1}" => 2}
                 ].shuffle
 
                     loop do
                         system('clear')
                         puts "Question #{@question_number}: \n\n"
-                        user_answer = @@prompt.select("#{question.question}",
+                        user_answer = @@prompt.select("#{@question.question}",
                         answers, "\n Use a lifeline:",  lifelines)
 
                             case user_answer 
                             when 1
                                 # sleep(1.5)
                                 puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                puts "You banked #{question.value_of_question}"
+                                puts "You banked #{@question.value_of_question}"
                             break
                             when 2 
                             puts "Incorrect! You lose!!!"
@@ -200,7 +200,7 @@ class CLI
                                   exit
                            when 5    
                                 if @this_game.lifeline_1 == true 
-                                puts user_answer = @@prompt.select("#{question.question}",
+                                puts user_answer = @@prompt.select("#{@question.question}",
                                 answers_5050)
                                     if user_answer == 1
                                         @this_game.lifeline_1 = false 
