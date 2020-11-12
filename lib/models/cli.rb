@@ -20,12 +20,12 @@ class CLI
         font = TTY::Font.new(:starwars)
         font2 = TTY::Font.new(:doom)
         puts pastel.yellow(font2.write("                                                                WHO"))        
-        # sleep(0.5)
+        sleep(0.5)
         puts ""
         puts pastel.yellow(font2.write("                 WANTS                                              TO"))  
-        # sleep(0.5)
+        sleep(0.5)
         puts pastel.yellow(font2.write("BE                                                                                                              A"))                                                                           
-        # sleep(0.5)
+        sleep(0.5)
         puts ""
         puts pastel.green(font.write("         THOUSANDAIRE"))
         puts ""
