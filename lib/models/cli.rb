@@ -88,7 +88,6 @@ class CLI
                     puts "The scores on the doors are..."
                     CLI.see_scores
                 when 3
-                    puts "Take me to your leader"
                     CLI.leaderboard
                 when 4
                     users_games = Game.all.find_all { |game| game.user_id == @user.id}
@@ -145,10 +144,9 @@ class CLI
         CLI.update_score
         puts "Congratulations, you are officially a Thousandaire"
         CLI.play_menu
-        #    binding.pry
     end
 
-#QUESTIONS -how to avoid repeats.
+
 
     def self.update_score 
         @this_game.update_column(:score, @score) 
@@ -156,9 +154,7 @@ class CLI
 
     def self.question_easy 
             question = Question.all.select { |q| q.difficulty == "easy"}.sample
-            GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
-        # binding.pry
-
+            # GameQuestion.create(game_id: @this_game.id, question_id: question.id, correct_answer: question.correct_answer)
             answers = [ 
                   {"#{question.correct_answer}" => 1},
                   {"#{question.incorrect_answer_1}" => 2},
@@ -265,9 +261,6 @@ class CLI
                     # "I'm sorry time is up"
                 end
             end
-            
-            # def 50_50 
-            # end
 
             def self.phone_a_friend 
                 CLI.countdown_timer 
@@ -278,11 +271,12 @@ class CLI
             end
             
             def self.leaderboard 
+                system('clear')
+                puts "Take me to your leader:"
                 all_scores = Game.all.max_by(10) { |g| g.score} 
                 user_ids = all_scores.map { |game| game.user_id }
                 players = user_ids.map {|id| User.find(id).username}
                 scores = all_scores.map { |g| g.score }
-                # binding.pry
                 i = 0
                 while i < 10
                  puts "#{i + 1}. #{players[i]}: #{scores[i]}"

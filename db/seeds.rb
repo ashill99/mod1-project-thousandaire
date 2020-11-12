@@ -16,23 +16,14 @@ api_data = JSON.parse(api_resp)
 easy_questions = api_data["results"].select { |q| q["difficulty"] == "easy" }
 medium_questions = api_data["results"].select { |q| q["difficulty"] == "medium"}
 hard_questions =  api_data["results"].select { |q| q["difficulty"] == "hard" }
-#these work, but need to figure out how to break down incorrect_answer hash with array as value# medium_questions.each { |q| Question.create(value_of_question: 50, difficulty: "medium", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")}
-# hard_questions.each { |q| Question.create(value_of_question: 50, difficulty: "hard", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: "Bull", incorrect_answer_2: "Cat", incorrect_answer_3: "Dog")}
 
-#THIS IS WORKING!
-# easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
-# fix these
-# medium_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
-# hard_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"], incorrect_answer_2: q["incorrect_answers"], incorrect_answer_3: q["incorrect_answers"])}
+easy_questions.each { |q| Question.create(value_of_question: 50, difficulty: "easy", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
+medium_questions.each { |q| Question.create(value_of_question: 100, difficulty: "medium", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
+hard_questions.each { |q| Question.create(value_of_question: 150, difficulty: "hard", question: q["question"], correct_answer: q["correct_answer"], incorrect_answer_1: q["incorrect_answers"][0], incorrect_answer_2: q["incorrect_answers"][1], incorrect_answer_3: q["incorrect_answers"][2])}
 
-# [{"category"=>"History",
-#   "type"=>"multiple",
-#   "difficulty"=>"easy",
-#   "question"=>"Which German field marshal was known as the `Desert Fox`?",
-#   "correct_answer"=>"Erwin Rommel",
-#   "incorrect_answers"=>["Ernst Busch", "Wolfram Freiherr von Richthofen", "Wilhelm List"]},
+#
 
-binding.pry
+# binding.pry
 
 # # users
 # chelsey = User.create(username: 'Chelsey', password: '1234')
