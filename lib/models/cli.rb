@@ -87,7 +87,7 @@ class CLI
             { "Delete your account" => 4},
             { "Quit" => 5}
             ]
-            user_input = @@prompt.select("Welcome #{@user.username}! Are you ready to win big?", choices)
+            user_input = @@prompt.select("Welcome #{@user.username}! Are you ready to win big?\n\n", choices)
             case user_input 
             when 1 
                 puts "Get your trigger finger ready!"
@@ -294,11 +294,13 @@ class CLI
                 end
 
                 def self.correct_answer
+                    @quest_correct_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_win.mp3')
+                @quest_correct_sound.play
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                    puts "You banked $#{@new_value}"
-                    current_total = @score + @new_value
-                    puts "Your total winnings are $#{current_total}."
-                    sleep(2.5)
+                                puts "You banked $#{@new_value}".colorize(:green)
+                                current_total = @score + @new_value
+                                puts "Your total winnings are $#{current_total}.".colorize(:green)
+                                sleep(2.5)
                 end
 
             def self.final_answer
@@ -313,6 +315,8 @@ class CLI
 
             def self.incorrect_answer 
                 system('clear')
+                @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                @quest_lose_sound.play
                 puts "Incorrect! You lose!!!".colorize(:red)
                 puts "You earned $#{@this_game.score} this game!.".colorize(:green)
                 puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
@@ -339,7 +343,7 @@ class CLI
                     sleep(1)
                 end
                 system('clear')
-                puts "Your time is up! Please answer the question!".colorize(:red)
+                puts "\n\n\nYour time is up! Please answer the question!".colorize(:red)
                 sleep 1.5
             end
 
