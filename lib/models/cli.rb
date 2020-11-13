@@ -178,6 +178,8 @@ class CLI
     end
 
     def self.question_correct 
+        @correct_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_win.mp3')
+        @correct_sound.play
         @question_number += 1
         @score += @new_value
         CLI.update_score 
@@ -188,6 +190,8 @@ class CLI
     end
 
     def self.question_easy 
+        @quest_start_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_start.mp3')
+        @quest_start_sound.play
             @question = Question.all.select { |q| q.difficulty == "easy"}.sample
             @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
             CLI.question_method 
@@ -249,6 +253,8 @@ class CLI
                                         break 
                                     else 
                                     system('clear')
+                                    @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                                    @quest_lose_sound.play
                                     puts "You had a 50/50 chance and you blew it!"
                                     puts "You earned $#{@this_game.score} this game!."
                                     puts "To collect your winnings please contact Flatiron School. \u{1F4b0}"
@@ -307,6 +313,8 @@ class CLI
 
                 def self.incorrect_answer 
                     system('clear')
+                    @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                    @quest_lose_sound.play
                     puts "Incorrect! You lose!!!"
                     puts "You earned $#{@this_game.score} this game!."
                     puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
