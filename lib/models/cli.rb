@@ -34,6 +34,7 @@ class CLI
     end
 
     def run 
+        system('clear')
         greet
         sleep(1)
         display_menu
@@ -299,8 +300,8 @@ class CLI
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
                                 puts "You banked $#{@new_value}".colorize(:green)
                                 current_total = @score + @new_value
-                                puts "Your total winnings are $#{current_total}.".colorize(:green)
-                                sleep(2.5)
+                                puts "Your current total is $#{current_total}.".colorize(:green)
+                                sleep(5)
                 end
 
             def self.final_answer
