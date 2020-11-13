@@ -294,18 +294,13 @@ class CLI
                 end
 
                 def self.correct_answer
+                    @quest_correct_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_win.mp3')
+                @quest_correct_sound.play
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
-<<<<<<< HEAD
                                 puts "You banked $#{@new_value}".colorize(:green)
                                 current_total = @score + @new_value
                                 puts "Your total winnings are $#{current_total}.".colorize(:green)
                                 sleep(2.5)
-=======
-                    puts "You banked $#{@new_value}"
-                    current_total = @score + @new_value
-                    puts "Your total winnings are $#{current_total}."
-                    sleep(2.5)
->>>>>>> sounds
                 end
 
             def self.final_answer
@@ -318,27 +313,17 @@ class CLI
                 end
             end
 
-<<<<<<< HEAD
+
             def self.incorrect_answer 
                 system('clear')
+                @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                @quest_lose_sound.play
                 puts "Incorrect! You lose!!!".colorize(:red)
                 puts "You earned $#{@this_game.score} this game!.".colorize(:green)
                 puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
                 user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
                 CLI.play_menu 
             end
-=======
-                def self.incorrect_answer 
-                    system('clear')
-                    @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
-                    @quest_lose_sound.play
-                    puts "Incorrect! You lose!!!"
-                    puts "You earned $#{@this_game.score} this game!."
-                    puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
-                    user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
-                    CLI.play_menu 
-                end
->>>>>>> sounds
 
             def self.question_medium
                 @question = Question.all.select { |q| q.difficulty == "medium"}.sample
