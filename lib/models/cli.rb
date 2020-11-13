@@ -36,13 +36,13 @@ class CLI
     def run 
         greet
         sleep(1)
-        CLI.display_menu
+        display_menu
     end 
 
-    def self.display_menu 
+    def display_menu 
         choices = [ 
             { "Log in" => 1},
-            { "Create new user" => 2},
+            { "Create new contestant" => 2},
             { "See Leaderboard" => 3},
             { "Quit" => 4}
             ]
@@ -62,7 +62,7 @@ class CLI
     def self.log_in
         prompt = TTY::Prompt.new
         username = prompt.ask("Welcome back! Remind us of your name?\n")
-        password = prompt.mask("Enter your password:\n")
+        password = prompt.mask("Enter your password:")
         if  User.find_by(username: username, password: password)
             @user = User.find_by(username: username, password: password)
             @user
@@ -73,7 +73,7 @@ class CLI
             CLI.log_in
         else 
             system('clear')
-            puts "hmm...we can't find you. Create a new user? "
+            puts "hmm...we can't find you. Create a new contestant? "
             CLI.new_user_create
         end
     end 
@@ -101,7 +101,7 @@ class CLI
                 users_games = Game.all.find_all { |game| game.user_id == @user.id}
                 Game.delete(users_games) # deletes all games belonging to user 
                 User.delete(@user)
-                puts "You have deleted your user account."
+                puts "You have deleted your account."
                 system('clear')
                 CLI.log_in
             when 5
@@ -116,7 +116,7 @@ class CLI
         username = prompt.ask("Whats your name, friend?")
         password = prompt.mask("Set your password:")
             if User.find_by(username: username, password: password)
-            puts "User already exists, log in here:"
+            puts "That contestant already exists, log in here:"
             CLI.log_in
         else 
         @user = User.create(username: username, password: password)
@@ -133,32 +133,32 @@ class CLI
         CLI.question_easy
         CLI.question_correct
 
-        # CLI.question_easy
-        # CLI.question_correct
+        CLI.question_easy
+        CLI.question_correct
 
-        # CLI.question_easy
-        # CLI.question_correct
+        CLI.question_easy
+        CLI.question_correct
 
-        # CLI.question_medium
-        # CLI.question_correct
+        CLI.question_medium
+        CLI.question_correct
 
-        # CLI.question_medium
-        # CLI.question_correct
+        CLI.question_medium
+        CLI.question_correct
 
-        # CLI.question_medium
-        # CLI.question_correct
+        CLI.question_medium
+        CLI.question_correct
 
-        # CLI.question_medium
-        # CLI.question_correct
+        CLI.question_medium
+        CLI.question_correct
 
-        # CLI.question_hard
-        # CLI.question_correct
+        CLI.question_hard
+        CLI.question_correct
 
-        # CLI.question_hard
-        # CLI.question_correct
+        CLI.question_hard
+        CLI.question_correct
 
-        # CLI.question_hard
-        # CLI.question_correct
+        CLI.question_hard
+        CLI.question_correct
 
         @theme_tune = Sound.new('./lib/models/game_sounds/millionaire_intro.mp3')
         @theme_tune.play
@@ -359,11 +359,9 @@ class CLI
                 while i < 10
                  puts "#{i + 1}. #{players[i]}: $#{scores[i]}"
                  i +=1
-                 @@prompt.keypress("Press any key to return to menu:")
-                 #so it won't go to display menu cuz not a class method
-                 #but can't go to play_menu if were not logged in
-                 CLI.display_menu
                 end 
+                @@prompt.keypress("Press any key to return to menu:")
+                CLI.play_menu
              end
         
              def self.see_scores
