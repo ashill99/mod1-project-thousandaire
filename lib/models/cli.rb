@@ -87,7 +87,7 @@ class CLI
             { "Delete your account" => 4},
             { "Quit" => 5}
             ]
-            user_input = @@prompt.select("Welcome #{@user.username}! Are you ready to win big?", choices)
+            user_input = @@prompt.select("Welcome #{@user.username}! Are you ready to win big?\n\n", choices)
             case user_input 
                 when 1 
                     puts "Get your trigger finger ready!"
@@ -251,8 +251,7 @@ class CLI
                                 puts "\n\n You have 15 seconds to phone a friend, make it count" 
                                 CLI.phone_a_friend 
                                 @this_game.lifeline_2 = false 
-                            elsif 
-                                @this_game.lifeline_2 == false  
+                            elsif @this_game.lifeline_2 == false  
                                 system('clear') 
                                 puts "\n\n You have already phoned your friend! \n\n"
                                 sleep(1)
@@ -285,10 +284,8 @@ class CLI
 
     def self.final_answer
         user_input = @@prompt.select("...Is that your final answer?", "Yes", "No")
-        if 
-            user_input == "Yes" 
-        elsif 
-            user_input == "No" 
+        if user_input == "Yes" 
+        elsif user_input == "No" 
             CLI.question_method #its shuffling the questions if say 'no'
         end
     end
@@ -317,7 +314,7 @@ class CLI
     end       
 
     def self.countdown_timer 
-        3.downto(0) do |i|
+        15.downto(0) do |i|
         puts "00:00:#{'%02d' % i}"
         sleep(1)
         end
