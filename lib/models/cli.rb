@@ -171,8 +171,6 @@ class CLI
     end
 
     def self.question_easy 
-        # @quest_start_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_start.mp3')
-        # @quest_start_sound.play
         @question = Question.all.select { |q| q.difficulty == "easy"}.sample
         @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
         CLI.question_method 
