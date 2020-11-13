@@ -319,7 +319,7 @@ class CLI
         sleep(1)
         end
         system('clear')
-        puts "Your time is up! Please answer the question!".colorize(:red)
+        puts  "\n\nYour time is up! Please answer the question!".colorize(:red)
         sleep 1.5
         end
 
