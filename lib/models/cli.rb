@@ -202,9 +202,9 @@ class CLI
                   {"#{@question.incorrect_answer_3}" => 4}
                       ].shuffle
             lifelines = [
-                    {"50/50" => 5},
-                    {"Phone a Friend" => 6}, 
-                    {"Ask the Audience" => 7},
+                    {"50/50".colorize(:yellow) => 5},
+                    {"Phone a Friend".colorize(:yellow) => 6}, 
+                    {"Ask the Audience".colorize(:yellow) => 7},
                     ]
             answers_5050 = [
                     {"#{@question.correct_answer}" => 1},
@@ -250,7 +250,7 @@ class CLI
                                         break 
                                     else 
                                     system('clear')
-                                    puts "You had a 50/50 chance and you blew it!"
+                                    puts "You had a 50/50 chance and you blew it!".colorize(:red)
                                     puts "You earned $#{@this_game.score} this game!."
                                     puts "To collect your winnings please contact Flatiron School. \u{1F4b0}"
                                     user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
@@ -290,9 +290,9 @@ class CLI
 
                 def self.correct_answer
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                puts "You banked $#{@new_value}"
+                                puts "You banked $#{@new_value}".colorize(:green)
                                 current_total = @score + @new_value
-                                puts "Your total winnings are $#{current_total}."
+                                puts "Your total winnings are $#{current_total}.".colorize(:green)
                                 sleep(2.5)
                 end
 
@@ -308,8 +308,8 @@ class CLI
 
             def self.incorrect_answer 
                 system('clear')
-                puts "Incorrect! You lose!!!"
-                puts "You earned $#{@this_game.score} this game!."
+                puts "Incorrect! You lose!!!".colorize(:red)
+                puts "You earned $#{@this_game.score} this game!.".colorize(:green)
                 puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
                 user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
                 CLI.play_menu 
@@ -334,7 +334,7 @@ class CLI
                     sleep(1)
                 end
                 system('clear')
-                puts "Your time is up! Please answer the question!"
+                puts "Your time is up! Please answer the question!".colorize(:red)
                 sleep 1.5
             end
 
