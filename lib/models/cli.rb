@@ -295,10 +295,10 @@ class CLI
 
                 def self.correct_answer
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
-                                puts "You banked $#{@new_value}"
-                                current_total = @score + @new_value
-                                puts "Your total winnings are $#{current_total}."
-                                sleep(2.5)
+                    puts "You banked $#{@new_value}"
+                    current_total = @score + @new_value
+                    puts "Your total winnings are $#{current_total}."
+                    sleep(2.5)
                 end
 
                 def self.final_answer
