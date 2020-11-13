@@ -105,7 +105,9 @@ class CLI
                 system('clear')
                 CLI.log_in
             when 5
+                system('clear')
                 puts "The pressure got too much for you huh?"
+                sleep(1)
                 exit!
         end
     end
@@ -213,7 +215,6 @@ class CLI
                     {"#{@question.correct_answer}" => 1},
                     {"#{@question.incorrect_answer_1}" => 2}
                 ].shuffle
-
                     loop do
                         system('clear')
                         puts "Question #{@question_number}: \n\n"
@@ -221,7 +222,6 @@ class CLI
                         puts "For $#{@new_value}\n\n"
                         user_answer = @@prompt.select("#{@question.question}",
                         answers, "\n Use a lifeline:",  lifelines, timer: 3)
-
                             case user_answer 
                             when 1
                                 sleep(1)
