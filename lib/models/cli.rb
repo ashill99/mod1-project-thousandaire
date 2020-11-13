@@ -107,6 +107,7 @@ class CLI
             when 5
                 system('clear')
                 puts "The pressure got too much for you huh?"
+                sleep(1)
                 exit!
         end
     end
@@ -179,6 +180,8 @@ class CLI
     end
 
     def self.question_correct 
+        @correct_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_win.mp3')
+        @correct_sound.play
         @question_number += 1
         @score += @new_value
         CLI.update_score 
@@ -189,6 +192,8 @@ class CLI
     end
 
     def self.question_easy 
+        @quest_start_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_start.mp3')
+        @quest_start_sound.play
             @question = Question.all.select { |q| q.difficulty == "easy"}.sample
             @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
             CLI.question_method 
@@ -210,7 +215,6 @@ class CLI
                     {"#{@question.correct_answer}" => 1},
                     {"#{@question.incorrect_answer_1}" => 2}
                 ].shuffle
-
                     loop do
                         system('clear')
                         puts "Question #{@question_number}: \n\n"
@@ -218,7 +222,6 @@ class CLI
                         puts "For $#{@new_value}\n\n"
                         user_answer = @@prompt.select("#{@question.question}",
                         answers, "\n Use a lifeline:",  lifelines, timer: 3)
-
                             case user_answer 
                             when 1
                                 sleep(1)
@@ -250,6 +253,8 @@ class CLI
                                         break 
                                     else 
                                     system('clear')
+                                    @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                                    @quest_lose_sound.play
                                     puts "You had a 50/50 chance and you blew it!".colorize(:red)
                                     puts "You earned $#{@this_game.score} this game!."
                                     puts "To collect your winnings please contact Flatiron School. \u{1F4b0}"
@@ -290,10 +295,17 @@ class CLI
 
                 def self.correct_answer
                     puts "Congratulations, #{@user.username}, that is the correct answer \n"
+<<<<<<< HEAD
                                 puts "You banked $#{@new_value}".colorize(:green)
                                 current_total = @score + @new_value
                                 puts "Your total winnings are $#{current_total}.".colorize(:green)
                                 sleep(2.5)
+=======
+                    puts "You banked $#{@new_value}"
+                    current_total = @score + @new_value
+                    puts "Your total winnings are $#{current_total}."
+                    sleep(2.5)
+>>>>>>> sounds
                 end
 
             def self.final_answer
@@ -306,6 +318,7 @@ class CLI
                 end
             end
 
+<<<<<<< HEAD
             def self.incorrect_answer 
                 system('clear')
                 puts "Incorrect! You lose!!!".colorize(:red)
@@ -314,6 +327,18 @@ class CLI
                 user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
                 CLI.play_menu 
             end
+=======
+                def self.incorrect_answer 
+                    system('clear')
+                    @quest_lose_sound = Sound.new('./lib/models/game_sounds/millionaire_quest_lose.mp3')
+                    @quest_lose_sound.play
+                    puts "Incorrect! You lose!!!"
+                    puts "You earned $#{@this_game.score} this game!."
+                    puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
+                    user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
+                    CLI.play_menu 
+                end
+>>>>>>> sounds
 
             def self.question_medium
                 @question = Question.all.select { |q| q.difficulty == "medium"}.sample
