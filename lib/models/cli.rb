@@ -36,10 +36,10 @@ class CLI
     def run 
         greet
         sleep(1)
-        display_menu
+        CLI.display_menu
     end 
 
-    def display_menu 
+    def self.display_menu 
         choices = [ 
             { "Log in" => 1},
             { "Create new user" => 2},
@@ -61,8 +61,8 @@ class CLI
 
     def self.log_in
         prompt = TTY::Prompt.new
-        username = prompt.ask("Welcome back! Remind us of your name?")
-        password = prompt.mask("Enter your password:")
+        username = prompt.ask("Welcome back! Remind us of your name?\n")
+        password = prompt.mask("Enter your password:\n")
         if  User.find_by(username: username, password: password)
             @user = User.find_by(username: username, password: password)
             @user
@@ -105,6 +105,7 @@ class CLI
                 system('clear')
                 CLI.log_in
             when 5
+                system('clear')
                 puts "The pressure got too much for you huh?"
                 exit!
         end
@@ -295,42 +296,37 @@ class CLI
                                 sleep(2.5)
                 end
 
-                def self.final_answer
-                    user_input = @@prompt.select("...Is that your final answer?", "Yes", "No")
-                    if 
-                        user_input == "Yes" 
-                    elsif 
-                        user_input == "No" 
-                        CLI.question_method #its shuffling the questions if say 'no'
-                    end
+            def self.final_answer
+                user_input = @@prompt.select("...Is that your final answer?", "Yes", "No")
+                if 
+                    user_input == "Yes" 
+                elsif 
+                    user_input == "No" 
+                    CLI.question_method #its shuffling the questions if say 'no'
                 end
+            end
 
-                def self.incorrect_answer 
-                    system('clear')
-                    puts "Incorrect! You lose!!!"
-                    puts "You earned $#{@this_game.score} this game!."
-                    puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
-                    user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
-                    CLI.play_menu 
-                end
+            def self.incorrect_answer 
+                system('clear')
+                puts "Incorrect! You lose!!!"
+                puts "You earned $#{@this_game.score} this game!."
+                puts "To collect your winnings please contact Flatiron School.  \u{1F4b0}"
+                user_answer = @@prompt.keypress(" \n\nWould you like to play again?, \n Press any key to continue", timer: 5)
+                CLI.play_menu 
+            end
 
             def self.question_medium
                 @question = Question.all.select { |q| q.difficulty == "medium"}.sample
                 @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
-            # binding.pry
             CLI.question_method 
             end      
 
-                    def self.question_hard
-                        @question = Question.all.select { |q| q.difficulty == "hard"}.sample
-                        @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
-                         # binding.pry
-                        CLI.question_method 
-                    end       
+            def self.question_hard
+                @question = Question.all.select { |q| q.difficulty == "hard"}.sample
+                @this_gq = GameQuestion.create(game_id: @this_game.id, question_id: @question.id, correct_answer: @question.correct_answer)
+                CLI.question_method 
+            end       
 
-            # def check_phone_a_friend 
-            #     Game.all.select { |game| game.user_id == @user}
-            # end
 
             def self.countdown_timer 
                 3.downto(0) do |i|
@@ -354,6 +350,7 @@ class CLI
                 system('clear')
                 font = TTY::Font.new(:doom)
                 puts font.write("Take Me To Your Leader...")
+                puts "Check em' out --"
                 all_scores = Game.all.max_by(10) { |g| g.score} 
                 user_ids = all_scores.map { |game| game.user_id }
                 players = user_ids.map {|id| User.find(id).username}
@@ -362,18 +359,22 @@ class CLI
                 while i < 10
                  puts "#{i + 1}. #{players[i]}: $#{scores[i]}"
                  i +=1
-                 @@prompt.keypress("Press any key to return to menu")
-                CLI.play_menu
+                 @@prompt.keypress("Press any key to return to menu:")
+                 #so it won't go to display menu cuz not a class method
+                 #but can't go to play_menu if were not logged in
+                 CLI.display_menu
                 end 
              end
         
              def self.see_scores
-                font = TTY::Font.new(:doom)
+                font = TTY::Font.new(:standard)
                 puts font.write("The scores on the doors are...")
                 players_games = Game.all.find_all { |g| g.user_id == @user.id}
                 p1 = players_games.map { |pg| pg.score}
                 p2 = p1.max(5)
                 puts "Your top scores are:\n"  
                 p2.each.with_index(1) do |s, i| puts "#{i}. $#{s}" end
+                @@prompt.keypress("Press any key to return to menu:")
+                CLI.play_menu
             end 
 end
